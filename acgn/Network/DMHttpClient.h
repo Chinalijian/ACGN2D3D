@@ -1,0 +1,51 @@
+//
+//  DMHttpClient.h
+//  acgn
+//
+//  Created by Ares on 2017/9/5.
+//  Copyright © 2017年 Discover Melody. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "DMNetConntectDefine.h"
+
+typedef void (^BlockSuccessMsg)(NSString *msg);//成功的提示消息
+@interface DMHttpClient : NSObject
+@property (nonatomic, strong) BlockSuccessMsg blockSuccessMsg;
++ (DMHttpClient *)sharedInstance;
+
+/**
+ *
+ *  @param url              地址
+ *  @param parameters       请求类型
+ *  @param requestMethod    请求参数
+ *  @param dataModelClass   返回的数据模型Class
+ *  @param mustToken        Token是否必须
+ *  @param success          请求成功处理块
+ *  @param failure          请求失败处理块
+ */
+-(void)initWithUrl:(NSString*)url
+      parameters:(NSMutableDictionary*)parameters
+          method:(DMHttpRequestType)requestMethod
+  dataModelClass:(Class)dataModelClass
+     isMustToken:(BOOL)mustToken
+         success:(void (^)(id responseObject))success
+         failure:(void (^)( NSError *error))failure;
+
+/**
+ * 同步请求
+ */
+-(void)synRequestWithUrl:(NSString *)synUrl
+          dataModelClass:(Class)dataModelClass
+             isMustToken:(BOOL)mustToken
+                 success:(void (^)(id responseObject))success
+                 failure:(void (^)( NSError *error))failure;
+
+- (void)downLoadFileRequest:(NSURL *)fileUrl fileName:(NSString *)fileName
+                    success:(void (^)(id responseObject))success
+                    failure:(void (^)( NSError *error))failure
+                   progress:(void (^)(double fractionCompleted))progressDownload;
+//请求合法性校验
+-(BOOL)isRequestValid;
+- (void)cancleAllHttpRequestOperations;
+@end
