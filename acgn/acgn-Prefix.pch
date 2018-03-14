@@ -1,0 +1,86 @@
+//
+//  acgn-Prefix.pch
+//  acgn
+//
+//  Created by Ares on 2018/2/1.
+//  Copyright © 2018年 Jian LI. All rights reserved.
+//
+
+#ifndef acgn_Prefix_pch
+#define acgn_Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#include "Preprocessor.h"
+
+#ifdef __OBJC__
+
+#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+
+#import <Masonry.h>
+#import <MJRefresh.h>
+#import <LUNSegmentedControl.h>
+#import <IQKeyboardManager.h>
+#import <MJExtension.h>
+#import <SDWebImageManager.h>
+#import "UIImageView+WebCache.h"
+#import <FLAnimatedImageView.h>
+#import <FLAnimatedImage.h>
+#import "SVProgressHUD.h"
+#import "DMAlertMananger.h"
+#import "PraiseDataModel.h"
+
+#import "ATools.h"
+#import "ADefine.h"
+#import "AEnums.h"
+
+#import "CollectionData.h"
+
+#import "MsgData.h"
+
+#import "PeopleListDataModel.h"
+#import "DynamicData.h"
+#import "RefreshDataModel.h"
+#import "SendMsgInputTextView.h"
+
+#import "EmptyView.h"
+
+#import "ContentCom.h"
+
+#import "MoviePlayerViewController.h"
+
+#import "PeopleDetailsViewController.h"
+#import "RoleDetailsDataModel.h"
+
+
+#import "AApiModel.h"
+
+#import "ComonTop.h"
+
+#import "DMServerApiConfig.h"
+#import "UserDataModel.h"
+#import "LoginViewController.h"
+#import "AccountLocalDataModel.h"
+#import "AccountInfo.h"
+#import "DynamicDetailsViewController.h"
+#endif
+
+#include "UnityTrampolineConfigure.h"
+#include "UnityInterface.h"
+
+
+#ifndef __OBJC__
+#if USE_IL2CPP_PCH
+#include "il2cpp_precompiled_header.h"
+#endif
+#endif
+
+#ifndef TARGET_IPHONE_SIMULATOR
+#define TARGET_IPHONE_SIMULATOR 0
+#endif
+
+#define printf_console printf
+
+#endif /* acgn_Prefix_pch */
