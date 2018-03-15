@@ -185,8 +185,11 @@
                         imageVRect.origin.y = 0;//(weakSelf.bHeight-imageVRect.size.height)/2;
                         strongImageView.frame = imageVRect;
                         if (weakSelf.typeInfo == Info_Type_Video || weakSelf.typeInfo == Info_Type_Url_Video) {
-                            weakLabel.frame = CGRectMake(imageVRect.size.width-35-4, imageVRect.size.height-16-4, 35, 16);
-                            weakVideoIconView.frame = CGRectMake((imageVRect.size.width-38)/2, (imageVRect.size.height-38)/2, 38, 38);
+                            strongImageView.frame = CGRectMake(0, 0, weakSelf.bWidth, weakSelf.bHeight-8);
+                            weakLabel.frame = CGRectMake(strongImageView.frame.size.width-35-4, strongImageView.frame.size.height-16-4, 35, 16);
+                            weakVideoIconView.frame = CGRectMake((strongImageView.frame.size.width-38)/2, (strongImageView.frame.size.height-38)/2, 38, 38);
+//                            weakLabel.frame = CGRectMake(imageVRect.size.width-35-4, imageVRect.size.height-16-4, 35, 16);
+//                            weakVideoIconView.frame = CGRectMake((imageVRect.size.width-38)/2, (imageVRect.size.height-38)/2, 38, 38);
                         } else {
                             weakLabel.frame = CGRectMake(imageVRect.size.width-24-4, imageVRect.size.height-16-4, 24, 16);
                         }

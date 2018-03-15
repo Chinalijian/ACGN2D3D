@@ -36,13 +36,13 @@
     self = [super init];
     if (self) {
         self.isInitUnity = NO;
-        // 注册Unity的事件
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidReceiveMemoryWarning:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
-        
+//        // 注册Unity的事件
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidReceiveMemoryWarning:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
+//
     }
     return self;
 }
@@ -131,28 +131,28 @@ void initMain() {
         return NO;
     }
 }
-
-- (void)appWillEnterForeground:(NSNotification *)notification {
-    [self applicationWillEnterForeground:[UIApplication sharedApplication]];
-}
-
-- (void)appDidBecomeActive:(NSNotification *)notification {
-    if (nil == self.unityView) {
-        return;
-    }
-    [self applicationDidBecomeActive:[UIApplication sharedApplication]];
-}
-
-- (void)appWillResignActive:(NSNotification *)notification {
-    [self applicationWillResignActive:[UIApplication sharedApplication]];
-}
-
-- (void)appWillTerminate:(NSNotification *)notification {
-    [self applicationWillTerminate:[UIApplication sharedApplication]];
-}
-
-- (void)appDidReceiveMemoryWarning:(NSNotification *)notification {
-    [self applicationDidReceiveMemoryWarning:[UIApplication sharedApplication]];
-}
+//
+//- (void)appWillEnterForeground:(NSNotification *)notification {
+//    [self applicationWillEnterForeground:[UIApplication sharedApplication]];
+//}
+//
+//- (void)appDidBecomeActive:(NSNotification *)notification {
+//    if (nil == self.unityView) {
+//        return;
+//    }
+//    [self applicationDidBecomeActive:[UIApplication sharedApplication]];
+//}
+//
+//- (void)appWillResignActive:(NSNotification *)notification {
+//    [self applicationWillResignActive:[UIApplication sharedApplication]];
+//}
+//
+//- (void)appWillTerminate:(NSNotification *)notification {
+//    [self applicationWillTerminate:[UIApplication sharedApplication]];
+//}
+//
+//- (void)appDidReceiveMemoryWarning:(NSNotification *)notification {
+//    [self applicationDidReceiveMemoryWarning:[UIApplication sharedApplication]];
+//}
 
 @end

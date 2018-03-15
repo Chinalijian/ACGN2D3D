@@ -27,9 +27,9 @@
 //    LAppLive2DManager* live2DMgr;
 //}
 
-- (void)leftOneAction:(id)sender {
-    
-    [self.navigationController popViewControllerAnimated:YES];
+- (void)clickBackButton:(id)sender {
+   
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewDidLoad {
@@ -41,17 +41,37 @@
         [ModelFileManager shareInstance].modelFileShowJsonName = self.detailData.showJson;
         [ModelFileManager shareInstance].modefFileAllPath = [NSString stringWithFormat:@"%@/\%@/\%@", self.detailData.roleId,self.detailData.fileName, self.detailData.showJson];
         
+        [self initSourceDataAndUI];
+        [self loadNav];
+        
         if (self.detailData.showType.integerValue == Model_Show_Type_2D) {
-            [self initSourceDataAndUI];
             self.type = Model_Show_Type_2D;
             [self downLoadModelFiles];
 
         } else {
-            [self initSourceDataAndUI];
             [self.msView.defaultShowImageView sd_setImageWithURL:[NSURL URLWithString:self.detailData.showUrl] placeholderImage:[UIImage imageNamed:@"default_model_Image"]];
             [self.msView.bottomProgressView setProgress:1 animated:YES];
         }
     }
+}
+
+- (void)loadNav {
+    
+    UIView *navView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, DMScreenWidth, [ATools getNavViewFrameHeightForIPhone])];
+    navView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:navView];
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(0, [ATools setViewFrameYForIPhoneX:20], 64, 44);
+    [backButton setImage:[UIImage imageNamed:@"public_back"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(clickBackButton:) forControlEvents:UIControlEventTouchUpInside];
+    [navView addSubview:backButton];
+    
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(64, backButton.frame.origin.y, DMScreenWidth-128, 44)];
+    titleLabel.text = @"立体形象";
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    titleLabel.font = [UIFont boldSystemFontOfSize:16];
+    [navView addSubview:titleLabel];
 }
 
 - (void)initSourceDataAndUI {
@@ -73,6 +93,26 @@
     NSString *tPath = [ATools getCachesHaveFile:[NSString stringWithFormat:@"%@/%@/%@", self.detailData.roleId, self.detailData.fileName, self.detailData.showJson]];
     BOOL isHave = [ATools fileExistsAtPathForLocal:tPath];
     if (isHave) {
+//
+//        // 处理耗时操作的代码块...
+//        // 获取Documents目录
+//        NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
+//        // 字典写入文件
+//        // 创建一个存储字典的文件路径
+//        NSString *fileDicPath = [docPath stringByAppendingPathComponent:[ModelFileManager shareInstance].modefFileAllPath];
+//
+//        NSData *data = [[NSData alloc] initWithContentsOfFile:fileDicPath];
+//
+//        NSDictionary *resultDic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+//        NSMutableDictionary *mutResultDic = [NSMutableDictionary dictionaryWithDictionary:resultDic];
+//        NSMutableDictionary *dicLayout = [resultDic objectForKey:@"layout"];
+//        if (!OBJ_IS_NIL(dicLayout)) {
+//            [dicLayout setObject:@"1.1" forKey:@"y"];
+//            //[resultDic writeToFile:fileDicPath atomically:YES];
+//        }
+//
+//
+//
         [self load2DModelOr3DMoel];
         self.msView.bottomProgressView.progress = 1.0;
         return;
@@ -84,10 +124,18 @@
         if (result) {
             NSString*unzipPath = [ATools autoUnZipFile:filePathUrl fileName:weakSelf.detailData.roleId];
             if (!STR_IS_NIL(unzipPath)) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [SVProgressHUD dismiss];
-                    [weakSelf load2DModelOr3DMoel];
+
+                dispatch_async(dispatch_get_global_queue(0, 0), ^{
+
+                    //通知主线程刷新
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [SVProgressHUD dismiss];
+                        [weakSelf load2DModelOr3DMoel];
+                    });
+                    
                 });
+                
+          
             } else {
                 [SVProgressHUD dismiss];
                 [weakSelf performSelector:@selector(faileErrorShowModel) withObject:nil afterDelay:1];
@@ -224,7 +272,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self setNavigationBarTransparence:YES titleColor:[UIColor whiteColor]];
+    //[self setNavigationBarTransparence:YES titleColor:[UIColor whiteColor]];
 }
 
 - (void)didReceiveMemoryWarning {

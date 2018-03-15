@@ -175,6 +175,8 @@
     if (_defaultShowImageView == nil) {
         _defaultShowImageView = [[UIImageView alloc] init];
         _defaultShowImageView.image = [UIImage imageNamed:@"default_model_Image"];
+        _defaultShowImageView.clipsToBounds = YES;
+        _defaultShowImageView.contentMode = UIViewContentModeScaleAspectFill;
     }
     return _defaultShowImageView;
 }

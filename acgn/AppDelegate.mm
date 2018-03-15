@@ -21,15 +21,19 @@
     
 }
 
+- (void)initUnityVC {
+    if (_unityController == nil) {
+        _unityController = [[UnityController alloc] init];
+    }
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc] initWithFrame:UIScreen.mainScreen.bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     [[ShareManage shareInstance] initThirdPartyInfo];
     [self initAcgnRootViewController];
-    if (_unityController == nil) {
-        _unityController = [[UnityController alloc] init];
-    }
+
     [self.window makeKeyAndVisible];
     return YES;
 }

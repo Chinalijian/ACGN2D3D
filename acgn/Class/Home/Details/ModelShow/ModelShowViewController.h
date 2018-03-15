@@ -6,8 +6,8 @@
 //  Copyright © 2018年 Jian LI. All rights reserved.
 //
 
-#import "ABaseViewController.h"
+#import "DMBaseMoreController.h"
 
-@interface ModelShowViewController : ABaseViewController
+@interface ModelShowViewController : DMBaseMoreController
 @property (nonatomic, strong) RoleDetailsDataModel *detailData;
 @end

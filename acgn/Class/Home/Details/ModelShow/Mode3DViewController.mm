@@ -9,6 +9,7 @@
 #import "Mode3DViewController.h"
 #import "UnityController.h"
 #import "ModeShowView.h"
+#import "AppDelegate.h"
 @interface Mode3DViewController () <ModeShowViewDelegate>
 @property (nonatomic, strong) ModeShowView *msView;
 
@@ -57,6 +58,7 @@
 
 -(void)load3DMode {
     [self showWaitingPop];
+    [APP_DELEGATE initUnityVC];
     [[UnityController instance] initUnity];
     [UnityController instance].playView.frame = self.msView.bounds;
     [self.msView addSubview:[UnityController instance].playView];

@@ -8,7 +8,7 @@
 
 #import "ContentCom.h"
 
-@interface ContentCom()
+@interface ContentCom() <ImageComDelegate>
 
 @property (nonatomic, assign) ContentCom_Type ccType;
 

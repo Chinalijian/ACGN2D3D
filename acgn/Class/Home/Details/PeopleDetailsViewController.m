@@ -178,7 +178,16 @@
     } else {
         ModelShowViewController *msVC = [[ModelShowViewController alloc] init];
         msVC.detailData = self.detailData;
-        [self.navigationController pushViewController:msVC animated:YES];
+        DMTransitioningAnimationHelper *animationHelper = [DMTransitioningAnimationHelper new];
+        self.animationHelper = animationHelper;
+        animationHelper.animationType = DMTransitioningAnimationRight;
+        animationHelper.presentFrame = CGRectMake(0, 0, DMScreenWidth, DMScreenHeight);
+        msVC.transitioningDelegate = animationHelper;
+        msVC.modalPresentationStyle = UIModalPresentationCustom;
+        [self presentViewController:msVC animated:YES completion:^{
+            
+        }];
+        //[self.navigationController pushViewController:msVC animated:YES];
     }
 }
 

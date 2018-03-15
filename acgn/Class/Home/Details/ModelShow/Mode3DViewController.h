@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 #import "DMBaseMoreController.h"
 @interface Mode3DViewController : DMBaseMoreController
-
+@property (nonatomic, strong) RoleDetailsDataModel *detailData;
 @end

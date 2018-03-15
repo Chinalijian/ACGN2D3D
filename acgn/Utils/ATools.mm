@@ -269,7 +269,7 @@
                                completionHandler:nil];
     if (success) {
         NSLog(@"Success unzip");
-        [self deleteFile:zipFilePath];
+        [self deleteFile:zipFilePath];        
     } else {
         NSLog(@"No success unzip");
         return nil;
