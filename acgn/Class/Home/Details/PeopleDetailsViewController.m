@@ -162,20 +162,19 @@
 }
 
 - (void)clickGotoModeShow:(id)sender {
-//    self.detailData.showType = @"3";
-    if (self.detailData.showType.integerValue == Model_Show_Type_3D) {
-        
-        Mode3DViewController *ms3d = [[Mode3DViewController alloc] init];
-        DMTransitioningAnimationHelper *animationHelper = [DMTransitioningAnimationHelper new];
-        self.animationHelper = animationHelper;
-        animationHelper.animationType = DMTransitioningAnimationRight;
-        animationHelper.presentFrame = CGRectMake(0, 0, DMScreenWidth, DMScreenHeight);
-        ms3d.transitioningDelegate = animationHelper;
-        ms3d.modalPresentationStyle = UIModalPresentationCustom;
-        [self presentViewController:ms3d animated:YES completion:^{
-            
-        }];
-    } else {
+//    if (self.detailData.showType.integerValue == Model_Show_Type_3D) {
+//
+//        Mode3DViewController *ms3d = [[Mode3DViewController alloc] init];
+//        DMTransitioningAnimationHelper *animationHelper = [DMTransitioningAnimationHelper new];
+//        self.animationHelper = animationHelper;
+//        animationHelper.animationType = DMTransitioningAnimationRight;
+//        animationHelper.presentFrame = CGRectMake(0, 0, DMScreenWidth, DMScreenHeight);
+//        ms3d.transitioningDelegate = animationHelper;
+//        ms3d.modalPresentationStyle = UIModalPresentationCustom;
+//        [self presentViewController:ms3d animated:YES completion:^{
+//
+//        }];
+//    } else {
         ModelShowViewController *msVC = [[ModelShowViewController alloc] init];
         msVC.detailData = self.detailData;
         DMTransitioningAnimationHelper *animationHelper = [DMTransitioningAnimationHelper new];
@@ -188,7 +187,7 @@
             
         }];
         //[self.navigationController pushViewController:msVC animated:YES];
-    }
+//    }
 }
 
 #pragma mark UITableView Delegate

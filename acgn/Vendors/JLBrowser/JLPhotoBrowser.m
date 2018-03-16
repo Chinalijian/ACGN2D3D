@@ -117,7 +117,7 @@
     //4.创建子视图
     [self setupSmallScrollViews];
     [SVProgressHUD dismiss];
-    self.countImageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 10, DMScreenWidth, 32)];
+    self.countImageLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, [ATools setViewFrameYForIPhoneX:10], DMScreenWidth, 32)];
     self.countImageLabel.textColor = [UIColor whiteColor];
     self.countImageLabel.font = [UIFont systemFontOfSize:14];
     self.countImageLabel.textAlignment = NSTextAlignmentCenter;

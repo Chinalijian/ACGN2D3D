@@ -28,7 +28,8 @@ static ACLive2DManager* _instance = nil;
         live2DMgr = new LAppLive2DManager();
         CGRect screen = [IPhoneUtil getScreenRect];
         if (IS_IPHONE_X) {
-            screen.size.height = screen.size.height+60;
+//            screen.origin.y = screen.origin.y-60;
+//            screen.size.height = screen.size.height+10;
         }
         viewA = live2DMgr->createView(screen);
         live2DMgr->changeModel();

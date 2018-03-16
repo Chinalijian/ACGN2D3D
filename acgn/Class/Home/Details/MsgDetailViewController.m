@@ -50,7 +50,7 @@
     CGFloat HX = 0;
     CGFloat HI = 0;
     if (IS_IPHONE_X) {
-        HX = 35;
+        HX = 35+25;
         HI = 17;
     }
     CGRect statusBarRect = [[UIApplication sharedApplication] statusBarFrame];

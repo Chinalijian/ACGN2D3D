@@ -50,7 +50,7 @@ namespace live2d
 		void L2DModelMatrix::centerY(float y)
 		{
 			float h = height * getScaleY();
-			translateY( y - h/2);
+			translateY(y - h/2);
 		}
 		
 		

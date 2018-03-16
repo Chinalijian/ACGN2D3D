@@ -237,11 +237,15 @@ using namespace live2d::framework;
     
     bg = [[SimpleImage alloc] initWithPath:path];
     
-    // 描画範囲。画面の最大表示範囲に合わせる
-    [bg setDrawRect:
-		VIEW_LOGICAL_MAX_LEFT:VIEW_LOGICAL_MAX_RIGHT:VIEW_LOGICAL_MAX_BOTTOM:VIEW_LOGICAL_MAX_TOP];
-    
-
+    if (IS_IPHONE_X) {
+        // 描画範囲。画面の最大表示範囲に合わせる
+        [bg setDrawRect:
+  VIEW_LOGICAL_MAX_LEFT:VIEW_LOGICAL_MAX_RIGHT:VIEW_LOGICAL_MAX_BOTTOM_X:VIEW_LOGICAL_MAX_TOP_X];
+    } else {
+        // 描画範囲。画面の最大表示範囲に合わせる
+        [bg setDrawRect:
+  VIEW_LOGICAL_MAX_LEFT:VIEW_LOGICAL_MAX_RIGHT:VIEW_LOGICAL_MAX_BOTTOM:VIEW_LOGICAL_MAX_TOP];
+    }
 }
 
 
