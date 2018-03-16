@@ -32,6 +32,7 @@
 		2A57D29220579B1F0052BBF5 /* DMPresentationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A57D28F20579B1F0052BBF5 /* DMPresentationController.m */; };
 		2A5AF7D6205A5D2600C19953 /* libLive2D.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A5AF7D3205A5D2500C19953 /* libLive2D.a */; };
 		2A5AF7D7205A5D2600C19953 /* libLive2D.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2A5AF7D5205A5D2500C19953 /* libLive2D.a */; };
+		2A64962B205BD18900B8B9CF /* DMActivityView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A649629205BD18800B8B9CF /* DMActivityView.m */; };
 		2A65145E20284B7D00737DEF /* MulCategoryScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A65145C20284B7D00737DEF /* MulCategoryScrollView.m */; };
 		2A6514612028571C00737DEF /* ContentBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A6514602028571C00737DEF /* ContentBaseViewController.m */; };
 		2A684789202C3B1E00D189D5 /* ContentListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A684788202C3B1E00D189D5 /* ContentListView.m */; };
@@ -224,6 +225,8 @@
 		2A57D28F20579B1F0052BBF5 /* DMPresentationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMPresentationController.m; sourceTree = "<group>"; };
 		2A5AF7D3205A5D2500C19953 /* libLive2D.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLive2D.a; sourceTree = "<group>"; };
 		2A5AF7D5205A5D2500C19953 /* libLive2D.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libLive2D.a; sourceTree = "<group>"; };
+		2A649629205BD18800B8B9CF /* DMActivityView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DMActivityView.m; sourceTree = "<group>"; };
+		2A64962A205BD18800B8B9CF /* DMActivityView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DMActivityView.h; sourceTree = "<group>"; };
 		2A65145A20284B7D00737DEF /* MulCategoryScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MulCategoryScrollView.h; sourceTree = "<group>"; };
 		2A65145C20284B7D00737DEF /* MulCategoryScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MulCategoryScrollView.m; sourceTree = "<group>"; };
 		2A65145F2028571C00737DEF /* ContentBaseViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ContentBaseViewController.h; sourceTree = "<group>"; };
@@ -1341,6 +1344,8 @@
 		309D904A20259A26002F414F /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				2A64962A205BD18800B8B9CF /* DMActivityView.h */,
+				2A649629205BD18800B8B9CF /* DMActivityView.m */,
 				2A57D28920579B1F0052BBF5 /* Transitioning */,
 				30AC00EC20446C78003A88FD /* PlayerViewController */,
 				30F58AF32040497600997AB9 /* BlockAlertView */,
@@ -1767,6 +1772,7 @@
 				30775126204DAA6A004801CD /* PlatformManager.mm in Sources */,
 				30AC00E020446C54003A88FD /* ZFPlayerModel.m in Sources */,
 				3048356120279F3B00DAAE3F /* MyFavViewController.m in Sources */,
+				2A64962B205BD18900B8B9CF /* DMActivityView.m in Sources */,
 				2A68478C202C3C5F00D189D5 /* ContentListCell.m in Sources */,
 				30775113204DAA6A004801CD /* LAppLive2DManager.mm in Sources */,
 				2A6F15D9202474F400B55AA7 /* SetPsdViewController.m in Sources */,

@@ -17,7 +17,7 @@
 #import "UnityController.h"
 #import "ModeShowView.h"
 #import "ACLive2DManager.h"
-
+#import "AppDelegate.h"
 @interface ModelShowViewController () <ModeShowViewDelegate>
 @property (nonatomic, strong) ModeShowView *msView;
 @property (nonatomic, assign) Model_Show_Type type;
@@ -50,7 +50,19 @@
             [self downLoadModelFiles];
 
         } else {
-            [self.msView.defaultShowImageView sd_setImageWithURL:[NSURL URLWithString:self.detailData.showUrl] placeholderImage:[UIImage imageNamed:@"default_model_Image"]];
+            WS(weakSelf);
+//            [self.msView.defaultShowImageView sd_setImageWithURL:[NSURL URLWithString:self.detailData.showUrl] placeholderImage:[UIImage imageNamed:@"default_model_Image"]];
+            [DMActivityView showActivity:self.view];
+            NSString * imageUrl = [self.detailData.showUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+            [self.msView.defaultShowImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                [DMActivityView hideActivity];
+                if (image) {
+                    weakSelf.msView.defaultShowImageView.image = image;
+                } else {
+                    weakSelf.msView.defaultShowImageView.image = [UIImage imageNamed:@"default_model_Image"];
+                }
+            }];
+            
             [self.msView.bottomProgressView setProgress:1 animated:YES];
         }
     }
@@ -99,8 +111,8 @@
         self.msView.bottomProgressView.progress = 1.0;
         return;
     }
-    [self showWaitingPop];
-    
+    //[self showWaitingPop];
+    [DMActivityView showActivity:self.view];
     __weak __typeof(&*self.msView.bottomProgressView) weakProgressView = self.msView.bottomProgressView;
     [AApiModel downloadFileFromServer:self.detailData.showUrl fileName:self.detailData.fileName block:^(BOOL result, NSString *filePathUrl) {
         if (result) {
@@ -111,7 +123,8 @@
                     [weakSelf modifyJsonContent:tPath];
                     //通知主线程刷新
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [SVProgressHUD dismiss];
+                        //[SVProgressHUD dismiss];
+                        [DMActivityView hideActivity];
                         [weakSelf load2DModelOr3DMoel];
                     });
                     
@@ -119,11 +132,13 @@
                 
           
             } else {
-                [SVProgressHUD dismiss];
+                //[SVProgressHUD dismiss];
+                [DMActivityView hideActivity];
                 [weakSelf performSelector:@selector(faileErrorShowModel) withObject:nil afterDelay:1];
             }
         } else {
-            [SVProgressHUD dismiss];
+            //[SVProgressHUD dismiss];
+            [DMActivityView hideActivity];
             [weakSelf performSelector:@selector(faileErrorShowModel) withObject:nil afterDelay:1];
         }
     } progress:^(double fractionCompleted) {

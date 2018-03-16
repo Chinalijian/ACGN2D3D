@@ -105,12 +105,12 @@
     DynamicCommentListData *resultData = [[DynamicCommentListData alloc] init];
     resultData.replyContext = self.obj.commentContext;
     resultData.commentContext = content;
-    resultData.commentUid = self.obj.commentUid;
+    resultData.commentUid = @"0";//self.obj.commentUid;
     resultData.isRole = self.obj.isRole;
     resultData.parentCommentId = self.obj.commentId;
     resultData.postId = self.obj.postId;
     resultData.replyId = self.obj.commentId;
-    resultData.replyUid = self.obj.commentUid;
+    resultData.replyUid = [AccountInfo getUserID];//self.obj.commentUid;
     resultData.roleId = self.obj.roleId;
     resultData.type = @"2";
 
