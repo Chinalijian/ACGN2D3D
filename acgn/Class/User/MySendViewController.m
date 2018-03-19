@@ -126,7 +126,7 @@
         _sTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, [ATools setViewFrameHeightToBottomForIPhoneX:DMScreenHeight-[ATools setViewFrameYForIPhoneX:107]]) style:UITableViewStylePlain];
         _sTableView.delegate = self;
         _sTableView.dataSource = self;
-        _sTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        _sTableView.separatorStyle = UITableViewCellSeparatorStyleNone;//UITableViewCellSeparatorStyleSingleLine;
         _sTableView.backgroundColor = [UIColor whiteColor];//UIColorFromRGB(0xf6f6f6);
         _sTableView.tableFooterView = [[UIView alloc] init];
     }

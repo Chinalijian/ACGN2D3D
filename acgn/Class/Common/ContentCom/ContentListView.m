@@ -295,7 +295,7 @@ UITableViewDataSource, ContentComDelegate, ContentListCellDelegate>
         _aTableView.delegate = self;
         _aTableView.dataSource = self;
         //_aTableView.scrollEnabled = NO;
-        _aTableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+        _aTableView.separatorStyle = UITableViewCellSeparatorStyleNone;//UITableViewCellSeparatorStyleSingleLine;
         _aTableView.backgroundColor = [UIColor whiteColor];//UIColorFromRGB(0xf6f6f6);
         self.aTableView.estimatedRowHeight = 0;
         self.aTableView.estimatedSectionHeaderHeight = 0;

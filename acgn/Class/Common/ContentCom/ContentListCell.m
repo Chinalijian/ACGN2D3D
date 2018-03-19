@@ -20,7 +20,7 @@
 @property (nonatomic, strong) UIButton *praiseLabel;
 
 @property (nonatomic, strong) DynamicCommentListData *cellObj;
-
+@property (nonatomic, strong) UILabel *lineLabel;
 @end
 
 @implementation ContentListCell
@@ -178,6 +178,7 @@
     [self addSubview:self.secondView];
     [self addSubview:self.timeLabel];
     [self addSubview:self.praiseLabel];
+    [self addSubview:self.lineLabel];
     [self setupMakeBodyViewSubViewsLayout];
 }
 
@@ -213,11 +214,18 @@
         make.height.mas_offset(Bottom_Area_H/2);
     }];
     [self.praiseLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.mas_right).offset(-10);
+        make.right.mas_equalTo(self.mas_right).offset(-16);
         make.bottom.mas_equalTo(self.mas_bottom).offset(0);
         make.width.mas_offset(Bottom_Area_H);
         make.height.mas_offset(32);
     }];
+    [_lineLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self).mas_offset(0);
+        make.left.mas_equalTo(self).mas_offset(0);
+        make.bottom.mas_equalTo(self.mas_bottom).mas_offset(-0.5);
+        make.height.mas_offset(0.5);
+    }];
+
 }
 
 - (CommintSecondView *)secondView {
@@ -282,7 +290,13 @@
     }
     return _headImageView;
 }
-
+- (UILabel *)lineLabel {
+    if (_lineLabel == nil) {
+        _lineLabel = [[UILabel alloc] init];
+        _lineLabel.backgroundColor = UIColorFromRGB(0xC3C3C3);
+    }
+    return _lineLabel;
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];

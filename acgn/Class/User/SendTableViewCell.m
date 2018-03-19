@@ -15,10 +15,11 @@
 @property (nonatomic, strong) UILabel *timeLabel;
 @property (nonatomic, strong) UIButton *praiseLabel;
 @property (nonatomic, strong) UIView *bottomView;
+@property (nonatomic, strong) UILabel *lineLabel;
 @end
 
 @implementation SendTableViewCell
-#define Content_List_Cell_H 35 //cell的默认高度
+#define Content_List_Cell_H 23//35 //cell的默认高度
 #define Top_Space_Y     15    //距离上部的间距
 #define Left_Space_X    16      //距离左边的间距
 #define Bottom_Area_H   44      //距离底部间距
@@ -118,7 +119,7 @@
 + (CGFloat)getSecondViewMaxHeight:(NSString *)userName otherName:(NSString *)otherName context:(NSString *)context{
     if (!OBJ_IS_NIL(context)) {
         CGFloat commitListH = 15 * 2;
-        NSString *content = [NSString stringWithFormat:@"%@ @%@:%@",userName,otherName,context];
+        NSString *content = context; //[NSString stringWithFormat:@"%@ @%@:%@",userName,otherName,context];
         CGFloat h = [ATools getHeightByWidth:Info_Width-SecondView_LeftRight_SPace*2 title:content font:Commit_Font];
         commitListH = commitListH + h;
         return commitListH;
@@ -132,27 +133,30 @@
     [self addSubview:self.bottomView];
     [self addSubview:self.secondView1];
     [self addSubview:self.secondView2];
+    [self addSubview:self.lineLabel];
     [self setupMakeBodyViewSubViewsLayout];
+    self.secondView1.backgroundColor = [UIColor clearColor];
+
 }
 
 - (void)setupMakeBodyViewSubViewsLayout {
     
     [self.secondView1 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self).offset(8);
-        make.top.mas_equalTo(self).offset(Top_Space_Y);
+        make.top.mas_equalTo(self).offset(0);
         make.width.mas_offset(Info_Width);
         make.height.mas_offset(0);
     }];
     
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.mas_left).offset(Left_Space_X);
-        make.top.mas_equalTo(_secondView1.mas_bottom).offset(0);
+        make.top.mas_equalTo(_secondView1.mas_bottom).offset(-5);
         make.width.mas_offset(DMScreenWidth/3+30);
-        make.height.mas_offset(Bottom_Area_H/2-5);
+        make.height.mas_offset(Bottom_Area_H/2-10);
     }];
     [self.praiseLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.mas_right).offset(-Left_Space_X);
-        make.top.mas_equalTo(_secondView1.mas_bottom).offset(-3);
+        make.top.mas_equalTo(_secondView1.mas_bottom).offset(-10);
         make.width.mas_offset(Bottom_Area_H);
         make.height.mas_offset(22);
     }];
@@ -169,6 +173,12 @@
         make.top.mas_equalTo(self.secondView2.mas_top).offset(0);
         make.width.mas_offset(DMScreenWidth);
         make.bottom.mas_equalTo(self.secondView2.mas_bottom).mas_offset(0);
+    }];
+    [_lineLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self).mas_offset(0);
+        make.left.mas_equalTo(self).mas_offset(0);
+        make.bottom.mas_equalTo(self.mas_bottom).mas_offset(-0.5);
+        make.height.mas_offset(0.5);
     }];
 }
 
@@ -189,7 +199,13 @@
     }
     return _secondView2;
 }
-
+- (UILabel *)lineLabel {
+    if (_lineLabel == nil) {
+        _lineLabel = [[UILabel alloc] init];
+        _lineLabel.backgroundColor = UIColorFromRGB(0xC3C3C3);
+    }
+    return _lineLabel;
+}
 - (UIButton *)praiseLabel {
     if (_praiseLabel == nil) {
         _praiseLabel = [UIButton buttonWithType:UIButtonTypeCustom];
