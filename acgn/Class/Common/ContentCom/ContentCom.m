@@ -59,7 +59,7 @@
 #define BottomView_H 34
 
 + (CGFloat)getContentCommonCellHeight:(DynamicListData *)obj contentType:(ContentCom_Type)type {
-    NSLog(@"dd = %f",(Content_Label_Widht)*(0.64)+10);
+    //NSLog(@"dd = %f",(Content_Label_Widht)*(0.64)+10);
     CGFloat totalHeight = 0;
     CGFloat tempNavHeight = Temp_Nav_H;
     CGFloat imageH = 0;
@@ -194,8 +194,9 @@
     self.contentLabel.attributedText = [ATools attributedStringFromStingWithFont:Commit_Font withLineSpacing:5 text:obj.postContext isEllipsis:isEllipsis];
 //    self.contentLabel.text = obj.postContext;
 //    [ATools changeLineSpaceForLabel:self.contentLabel WithSpace:5];
-    NSString * imageUrl = [obj.imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    [self.peopleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil];
+//    NSString * imageUrl = [obj.imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+//    [self.peopleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil];
+    [ATools loadImageUrlForImageView:self.peopleImageView imageUrl:obj.imageUrl];
     [self.attButton setTitle:obj.seeNum forState:UIControlStateNormal];
     [self.comButton setTitle:obj.commentNum forState:UIControlStateNormal];
     [self.praButton setTitle:obj.fabulousNum forState:UIControlStateNormal];

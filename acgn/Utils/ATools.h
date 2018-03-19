@@ -66,6 +66,9 @@
 //是否已经有此文件
 + (BOOL)fileExistsAtPathForLocal:(NSString *)filePath;
 
+//加载图片
++ (void)loadImageUrlForImageView:(UIImageView *)imageV imageUrl:(NSString *)url;
+
 @end
 
 

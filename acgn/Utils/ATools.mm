@@ -363,7 +363,28 @@
     return blHave;
 }
 
-
+//加载图片
++ (void)loadImageUrlForImageView:(UIImageView *)imageV imageUrl:(NSString *)url {
+    if (OBJ_IS_NIL(imageV)) {
+        return;
+    }
+    if (STR_IS_NIL(url)) {
+        imageV.image = Default_Placeholder_Image;
+        return;
+    }
+    imageV.contentMode = UIViewContentModeCenter;
+    NSString * imageUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [imageV sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:Default_PlaceholderLoading_Image completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        if (image) {
+            imageV.contentMode = UIViewContentModeScaleAspectFill;
+            if (image) {
+                imageV.image = image;
+            } else {
+                imageV.image = Default_Placeholder_Image;
+            }
+        }
+    }];
+}
 
 @end
 
