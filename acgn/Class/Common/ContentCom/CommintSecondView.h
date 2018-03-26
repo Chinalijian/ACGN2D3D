@@ -12,6 +12,7 @@
 - (void)cleanAllSubLabel;
 - (void)createCommitLabel:(CGFloat)w;
 - (void)hiddenLabel:(NSInteger)count;
+- (void)setTotalLabelNumber:(NSInteger)count;
 - (void)setContentForFirstLabel:(NSString *)userName
                       otherName:(NSString *)otherName
                         content:(NSString *)content;

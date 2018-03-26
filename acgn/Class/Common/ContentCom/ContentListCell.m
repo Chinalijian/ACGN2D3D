@@ -85,7 +85,13 @@
                 DynamicCommentSecondData *csData3 = [obj.secondView objectAtIndex:2];
                 [self setSecondViewThirdInfo:csData3];
             }
+            if (count > 3) {
+                [self.secondView setTotalLabelNumber:count];
+            }
+        } else {
+            [self.secondView hiddenLabel:0];
         }
+        
         CGFloat commitH = [ContentListCell getCommitContentMaxHeight:obj];
         CGFloat secondH = [ContentListCell getSecondViewMaxHeight:obj];
         [self upDateCellLayout:commitH secondHeight:secondH];

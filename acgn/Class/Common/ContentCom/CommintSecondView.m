@@ -13,6 +13,7 @@
 @property (nonatomic, strong) UILabel *secondLabel;
 @property (nonatomic, strong) UILabel *thirdLabel;
 @property (nonatomic, assign) CGFloat widthLabel;
+@property (nonatomic, strong) UILabel *totalLabel;
 @end
 
 @implementation CommintSecondView
@@ -34,6 +35,7 @@
     [self addSubview:self.firstLabel];
     [self addSubview:self.secondLabel];
     [self addSubview:self.thirdLabel];
+    [self addSubview:self.totalLabel];
     [self setupLabelLayout];
 }
 - (void)setContentForFirstLabel:(NSString *)userName
@@ -114,20 +116,31 @@
     return H;
 }
 
+- (void)setTotalLabelNumber:(NSInteger)count {
+    self.totalLabel.text = [NSString stringWithFormat:@"共%ld条回复", count];
+}
 
 - (void)hiddenLabel:(NSInteger)count {
-    if (count == 1) {
-        self.firstLabel.hidden = NO;
-        self.secondLabel.hidden = YES;
-        self.thirdLabel.hidden = YES;
-    } else if (count == 2) {
-        self.firstLabel.hidden = NO;
-        self.secondLabel.hidden = NO;
-        self.thirdLabel.hidden = YES;
-    } else {
-        self.firstLabel.hidden = NO;
-        self.secondLabel.hidden = NO;
-        self.thirdLabel.hidden = NO;
+    self.totalLabel.hidden = YES;
+    self.firstLabel.hidden = YES;
+    self.secondLabel.hidden = YES;
+    self.thirdLabel.hidden = YES;
+    if (count > 0) {
+        if (count == 1) {
+            self.firstLabel.hidden = NO;
+        } else if (count == 2) {
+            self.firstLabel.hidden = NO;
+            self.secondLabel.hidden = NO;
+        } else if (count == 3) {
+            self.firstLabel.hidden = NO;
+            self.secondLabel.hidden = NO;
+            self.thirdLabel.hidden = NO;
+        } else {
+            self.totalLabel.hidden = NO;
+            self.firstLabel.hidden = NO;
+            self.secondLabel.hidden = NO;
+            self.thirdLabel.hidden = NO;
+        }
     }
 }
 
@@ -146,6 +159,12 @@
     }];
     [self.thirdLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_secondLabel.mas_bottom).mas_offset(15);
+        make.left.mas_equalTo(self).mas_offset(10);
+        make.width.mas_offset(self.widthLabel-20);
+        make.height.mas_offset(15);
+    }];
+    [self.totalLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(_thirdLabel.mas_bottom).mas_offset(15);
         make.left.mas_equalTo(self).mas_offset(10);
         make.width.mas_offset(self.widthLabel-20);
         make.height.mas_offset(15);
@@ -187,6 +206,16 @@
         _thirdLabel.numberOfLines = 0;
     }
     return _thirdLabel;
+}
+- (UILabel *)totalLabel {
+    if (_totalLabel == nil) {
+        _totalLabel = [[UILabel alloc] init];
+        _totalLabel.text = @"";
+        _totalLabel.textAlignment = NSTextAlignmentLeft;
+        _totalLabel.textColor = UIColorFromRGB(0x3580E6);
+        _totalLabel.font = [UIFont systemFontOfSize:13];
+    }
+    return _totalLabel;
 }
 
 //- (void)loadUI {
