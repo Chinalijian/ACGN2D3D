@@ -22,5 +22,12 @@
             smallSpace:(CGFloat)sspace
                 frameW:(CGFloat)frameW
                 frameH:(CGFloat)frameH;
+- (id)initWithBigImage:(CGFloat)width
+        bigImageHeight:(CGFloat)height
+       smallImageWidth:(CGFloat)swidth
+      samllImageHeight:(CGFloat)sheight
+            smallSpace:(CGFloat)sspace
+                frameW:(CGFloat)frameW
+                frameH:(CGFloat)frameH isNoCalculate:(BOOL)isNoCalculate;
 - (void)configImageCom:(NSArray *)array height:(CGFloat)height type:(Info_Type)type thumbnailUrl:(NSString *)thumbnailUrl;
 @end
