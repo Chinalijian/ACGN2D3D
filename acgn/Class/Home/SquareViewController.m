@@ -121,6 +121,8 @@
                     [weakSelf.squareArray addObjectsFromArray:obj.latestPost];
                     DynamicListData *model = [obj.latestPost firstObject];
                     weakSelf.firstID = model.postId;
+                } else {
+                    [ATools showSVProgressHudCustom:@"" title:@"这已经是最新的动态了"];
                 }
                 if (obj.oldPost.count > 0) {
                     [weakSelf.squareArray addObjectsFromArray:obj.oldPost];
