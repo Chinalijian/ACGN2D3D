@@ -57,7 +57,7 @@
 //个人详情人物信息
 #define DM_GetRoleInfoDetails_Url       [DM_Url stringByAppendingFormat:@"role/getRoleInfo"]
 //吐槽中心/二级评论详情
-#define DM_GetCommentDetails_Url        [DM_Url stringByAppendingFormat:@"post/getCommentDetails"]
+#define DM_GetCommentDetails_Url        [DM_Url stringByAppendingFormat:@"post/newCommentDetails"]//[DM_Url stringByAppendingFormat:@"post/getCommentDetails"]
 //收藏
 #define DM_Add_Collection_Url           [DM_Url stringByAppendingFormat:@"user/post/addCollection"]
 //取消收藏

@@ -42,7 +42,7 @@
 //个人详情人物信息
 + (void)getRoleInfoData:(NSString *)roleId block:(void(^)(BOOL result, RoleDetailsDataModel *obj))block;
 //吐槽中心
-+ (void)getGetCommentDetailsData:(NSString *)commentId lastId:(NSString *)lastId block:(void(^)(BOOL result, NSArray *array))block;
++ (void)getGetCommentDetailsData:(NSString *)commentId lastId:(NSString *)lastId block:(void(^)(BOOL result, MsgCommitData *obj))block;
 //收藏
 + (void)addCollectionForUser:(NSString *)postId roleId:(NSString *)roleId block:(void(^)(BOOL result))block;
 //取消收藏

@@ -49,7 +49,7 @@
 @property (nonatomic, copy) NSString *roleName;
 @property (nonatomic, copy) NSString *roleAvatar;
 @property (nonatomic, copy) NSString *isRole;
-
+@property (nonatomic, copy) NSString *secondIsRole;
 //吐槽中心
 @property (nonatomic, copy) NSString *fabulousNum;
 

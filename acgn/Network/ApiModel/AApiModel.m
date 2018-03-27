@@ -265,12 +265,12 @@
 }
 
 //吐槽中心
-+ (void)getGetCommentDetailsData:(NSString *)commentId lastId:(NSString *)lastId block:(void(^)(BOOL result, NSArray *array))block {
++ (void)getGetCommentDetailsData:(NSString *)commentId lastId:(NSString *)lastId block:(void(^)(BOOL result, MsgCommitData *obj))block {
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithObjectsAndKeys:commentId, @"commentId", lastId, @"lastId", @"10", @"rowPage", nil];
-    [[DMHttpClient sharedInstance] initWithUrl:DM_GetCommentDetails_Url parameters:dic method:DMHttpRequestPost dataModelClass:[MsgData class] isMustToken:NO success:^(id responseObject) {
+    [[DMHttpClient sharedInstance] initWithUrl:DM_GetCommentDetails_Url parameters:dic method:DMHttpRequestPost dataModelClass:[MsgCommitData class] isMustToken:NO success:^(id responseObject) {
         if (!OBJ_IS_NIL(responseObject)) {
-            MsgData *model = (MsgData *)responseObject;
-            block(YES, model.data);
+            MsgCommitData *model = (MsgCommitData *)responseObject;
+            block(YES, model);
         } else {
             block(NO, nil);
         }

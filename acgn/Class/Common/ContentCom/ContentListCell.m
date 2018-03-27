@@ -88,8 +88,20 @@
             if (count > 3) {
                 [self.secondView setTotalLabelNumber:count];
             }
+            [self.timeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.bottom.mas_equalTo(self.mas_bottom).offset(-5);
+            }];
+            [self.praiseLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.bottom.mas_equalTo(self.mas_bottom).offset(-0);
+            }];
         } else {
             [self.secondView hiddenLabel:0];
+            [self.timeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.bottom.mas_equalTo(self.mas_bottom).offset(-10);
+            }];
+            [self.praiseLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.bottom.mas_equalTo(self.mas_bottom).offset(-5);
+            }];
         }
         
         CGFloat commitH = [ContentListCell getCommitContentMaxHeight:obj];
@@ -215,13 +227,13 @@
     }];
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(_nameLabel.mas_left).offset(0);
-        make.bottom.mas_equalTo(self.mas_bottom).offset(-5);
+        make.bottom.mas_equalTo(self.mas_bottom).offset(-10);
         make.width.mas_offset(DMScreenWidth/3);
         make.height.mas_offset(Bottom_Area_H/2);
     }];
     [self.praiseLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.mas_equalTo(self.mas_right).offset(-16);
-        make.bottom.mas_equalTo(self.mas_bottom).offset(0);
+        make.bottom.mas_equalTo(self.mas_bottom).offset(-5);
         make.width.mas_offset(Bottom_Area_H);
         make.height.mas_offset(32);
     }];

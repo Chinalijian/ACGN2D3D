@@ -84,15 +84,20 @@
 
 - (void)loadData {
     WS(weakSelf);
-    [AApiModel getGetCommentDetailsData:self.obj.commentId lastId:self.lastID block:^(BOOL result, NSArray *array) {
+    [AApiModel getGetCommentDetailsData:self.obj.commentId lastId:self.lastID block:^(BOOL result, MsgCommitData *obj) {
         if (result) {
-            if (array.count > 0) {
+            if (!OBJ_IS_NIL(obj)) {
                 if (weakSelf.lastID.integerValue == -1) {
                     [weakSelf.datas removeAllObjects];
+                    if (!OBJ_IS_NIL(obj.firstComment)) {
+                        [weakSelf.datas addObject:obj.firstComment];
+                    }
                 }
-                [weakSelf.datas addObjectsFromArray:array];
-                DynamicCommentListData *data = [weakSelf.datas lastObject];
-                weakSelf.lastID = data.commentId;
+                if (obj.secondComment.count > 0) {
+                    [weakSelf.datas addObjectsFromArray:obj.secondComment];
+                    DynamicCommentListData *data = [weakSelf.datas lastObject];
+                    weakSelf.lastID = data.commentId;
+                }
             }
             [weakSelf.mTableView reloadData];
         }

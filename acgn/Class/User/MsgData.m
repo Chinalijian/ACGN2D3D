@@ -17,3 +17,18 @@
              };
 }
 @end
+
+
+@implementation MsgCommitData
+
++(NSDictionary *)mj_objectClassInArray {
+    return @{
+             @"secondComment" : @"DynamicCommentListData"
+             };
+}
+
+@end
+
+@implementation MsgDetailData
+
+@end
