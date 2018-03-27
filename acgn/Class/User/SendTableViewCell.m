@@ -98,7 +98,7 @@
 
 - (void)updateSecondCommitViewFrame:(CGFloat)secondH view:(CommintSecondView *)viewSelf {
     [viewSelf mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_offset(secondH);
+        make.height.mas_offset(secondH+2);
     }];
 }
 
@@ -163,7 +163,7 @@
     
     [self.secondView2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(_secondView1.mas_left).offset(0);
-        make.top.mas_equalTo(_timeLabel.mas_bottom).offset(1);
+        make.top.mas_equalTo(_timeLabel.mas_bottom).offset(10);
         make.width.mas_offset(Info_Width);
         make.height.mas_offset(0);
     }];

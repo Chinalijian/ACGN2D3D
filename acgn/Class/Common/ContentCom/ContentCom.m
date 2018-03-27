@@ -50,7 +50,7 @@
 #define Image_Height (Content_Label_Widht)*(0.64)+5
 #define Image_Width (Content_Label_Widht)-10
 #define Image_Space 8
-
+#define Video_Height (Content_Label_Widht)*(0.64)-15
 #define Small_Image_W_H 63
 #define Small_Image_Space 4
 
@@ -69,7 +69,11 @@
             if (STR_IS_NIL(obj.thumbnailUrl) && obj.postUrls.count == 0) {
                 imageH = 0;
             } else {
-                imageH = Image_Height;
+                if (obj.postType.integerValue == Info_Type_Video || obj.postType.integerValue == Info_Type_Url_Video) {
+                    imageH = Video_Height;
+                } else {
+                    imageH = Image_Height;
+                }
             }
             
         }
@@ -252,7 +256,11 @@
             if (STR_IS_NIL(obj.thumbnailUrl) && obj.postUrls.count == 0) {
                 imageH = 0;
             } else {
-                imageH = Image_Height;
+                if (obj.postType.integerValue == Info_Type_Video || obj.postType.integerValue == Info_Type_Url_Video) {
+                    imageH = Video_Height;
+                } else {
+                    imageH = Image_Height;
+                }
             }
             
         }

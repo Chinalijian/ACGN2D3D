@@ -77,7 +77,7 @@
 }
 
 - (void)onlySinglePic:(NSString *)imageUrl height:(CGFloat)height {
-    self.bigImageView.backgroundColor = [UIColor redColor];
+
     NSString *imageUrlS = [imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     self.bigImageView.frame = CGRectMake(0, 0, self.bigImageView.frame.size.width, height);
     self.smallImageView.hidden = YES;
@@ -207,8 +207,7 @@
                         }
                         //image的高度大于当前视图的高度
                         if(imageVRect.size.height > weakSelf.bHeight)
-                        {
-                            
+                        {                            
                             //根据高度计算宽度，确定宽度
                             imageVRect.size.width = weakSelf.bHeight * imageVRect.size.width / imageVRect.size.height;
                             imageVRect.size.height = weakSelf.bHeight;
@@ -217,8 +216,7 @@
                         //计算x，y
                         imageVRect.origin.x = 0;//(weakSelf.bWidth-imageVRect.size.width)/2;
                         imageVRect.origin.y = 0;//(weakSelf.bHeight-imageVRect.size.height)/2;
-                        weakSelf.bigImageView.frame = CGRectMake(0, 0, imageVRect.size.width, imageVRect.size.height);
-                        strongImageView.frame = imageVRect;
+                        
                         if (weakSelf.typeInfo == Info_Type_Video || weakSelf.typeInfo == Info_Type_Url_Video) {
                             strongImageView.frame = CGRectMake(0, 0, weakSelf.bWidth, weakSelf.bHeight-8);
                             weakLabel.frame = CGRectMake(strongImageView.frame.size.width-35-4, strongImageView.frame.size.height-16-4, 35, 16);
@@ -226,6 +224,8 @@
 //                            weakLabel.frame = CGRectMake(imageVRect.size.width-35-4, imageVRect.size.height-16-4, 35, 16);
 //                            weakVideoIconView.frame = CGRectMake((imageVRect.size.width-38)/2, (imageVRect.size.height-38)/2, 38, 38);
                         } else {
+                            weakSelf.bigImageView.frame = CGRectMake(0, 0, imageVRect.size.width, imageVRect.size.height);
+                            strongImageView.frame = imageVRect;
                             weakLabel.frame = CGRectMake(imageVRect.size.width-24-4, imageVRect.size.height-16-4, 24, 16);
                         }
                         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageTap:)];
