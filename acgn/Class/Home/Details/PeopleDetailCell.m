@@ -58,7 +58,7 @@
         
     } else if (obj.postType.integerValue == Info_Type_Video || obj.postType.integerValue == Info_Type_Url_Video) {
         //视频
-        picHeight = Video_Height + 50 + 30;
+        picHeight = Video_Height + 0 + 30;
     }
 //    CGFloat totalHeight = contentHeight + picHeight + Button_View_ + Space_Bottom_Cell + Space_Content_;
     CGFloat totalHeight = contentHeight + picHeight + Button_View_ + Space_Content_*2;
@@ -136,25 +136,19 @@
             self.imageCom.hidden = NO;
             CGFloat imageH = [PeopleDetailCell getImageMaxHeight:obj];
             [_imageCom mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(self.contentLabel.mas_bottom).mas_offset(Space_Content_);
                 make.height.mas_offset(imageH);
             }];
-            if (obj.postType.integerValue == Info_Type_Video || obj.postType.integerValue == Info_Type_Url_Video) {
-                [self.buttonView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.top.mas_equalTo(self.imageCom.mas_bottom).mas_offset(Space_Content_);
-                }];
-            } else {
-                [self.buttonView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.top.mas_equalTo(self.imageCom.mas_bottom).mas_offset(Space_Content_);
-                }];
-            }
+//            [self.buttonView mas_updateConstraints:^(MASConstraintMaker *make) {
+//                make.top.mas_equalTo(self.imageCom.mas_bottom).mas_offset(Space_Content_);
+//            }];
             [self.imageCom configImageCom:obj.postUrls height:imageH type:obj.postType.integerValue thumbnailUrl:obj.thumbnailUrl];
             
         } else {
-            
-            [self.buttonView mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.top.mas_equalTo(self.contentLabel.mas_bottom).mas_offset(10);
+            [_imageCom mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(self.contentLabel.mas_bottom).mas_offset(0);
+                make.height.mas_offset(0);
             }];
-            
         }
         [self.seeNumButton setTitle:obj.seeNum forState:UIControlStateNormal];
         [self.commitNumButton setTitle:obj.commentNum forState:UIControlStateNormal];
@@ -273,7 +267,7 @@
         make.top.mas_equalTo(self.imageCom.mas_bottom).mas_offset(Space_Content_);
         make.left.mas_equalTo(self.contentLabel.mas_left).mas_offset(0);
         make.height.mas_offset(Button_View_);
-        make.width.mas_offset(Content_With);
+        make.width.mas_offset(Content_With-14);
     }];
 
     [self.seeNumButton mas_makeConstraints:^(MASConstraintMaker *make) {

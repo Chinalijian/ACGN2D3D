@@ -77,7 +77,8 @@
 }
 
 - (void)onlySinglePic:(NSString *)imageUrl height:(CGFloat)height {
-    
+    self.bigImageView.backgroundColor = [UIColor redColor];
+    NSString *imageUrlS = [imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     self.bigImageView.frame = CGRectMake(0, 0, self.bigImageView.frame.size.width, height);
     self.smallImageView.hidden = YES;
     self.bigImageView.hidden = NO;
@@ -91,11 +92,18 @@
         self.bigSourceImageView.frame = self.bigImageView.bounds;
         [ATools loadImageUrlForImageView:self.bigSourceImageView imageUrl:imageUrl];
         [self.imageViews addObject:_bigSourceImageView];
-        return;
+        
+        if (self.typeInfo == Info_Type_Video || self.typeInfo == Info_Type_Url_Video) {
+//            self.bigSourceImageView.frame = CGRectMake(0, 0, self.bWidth, self.bHeight-8);
+            self.typeLabel.frame = CGRectMake(self.bigSourceImageView.frame.size.width-35-4, self.bigSourceImageView.frame.size.height-16-4, 35, 16);
+            self.videoIconView.frame = CGRectMake((self.bigSourceImageView.frame.size.width-38)/2, (self.bigSourceImageView.frame.size.height-38)/2, 38, 38);
+        } else {
+            self.typeLabel.frame = CGRectMake(self.bigSourceImageView.frame.size.width-24-4, self.bigSourceImageView.frame.size.height-16-4, 24, 16);
+        }
+        
+    } else {
+        [self displaySourceImage:imageUrlS];
     }
-
-    NSString * imageUrlS = [imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    [self displaySourceImage:imageUrlS];
 
     //2.添加手势
 //    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageTap:)];
@@ -218,7 +226,6 @@
 //                            weakLabel.frame = CGRectMake(imageVRect.size.width-35-4, imageVRect.size.height-16-4, 35, 16);
 //                            weakVideoIconView.frame = CGRectMake((imageVRect.size.width-38)/2, (imageVRect.size.height-38)/2, 38, 38);
                         } else {
-     
                             weakLabel.frame = CGRectMake(imageVRect.size.width-24-4, imageVRect.size.height-16-4, 24, 16);
                         }
                         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageTap:)];
