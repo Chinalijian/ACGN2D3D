@@ -22,6 +22,13 @@
 @property (nonatomic, copy) NSString *commentUid;
 @property (nonatomic, copy) NSString *parentCommentId;
 @property (nonatomic, copy) NSString *otherName;
+
+@property (nonatomic, copy) NSString *fabulousNum;
+@property (nonatomic, copy) NSString *isRole;
+@property (nonatomic, copy) NSString *hasPraise;
+@property (nonatomic, copy) NSString *roleId;
+@property (nonatomic, copy) NSString *secondIsRole;
+
 @end
 
 @interface DynamicCommentListData: NSObject

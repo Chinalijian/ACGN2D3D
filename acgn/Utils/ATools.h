@@ -28,6 +28,11 @@
 + (CGFloat)getHeightByWidth:(CGFloat)width title:(NSString *)title font:(UIFont*)font withLineSpacing:(CGFloat)lineSpacing;
 + (CGFloat)getHeightByHeight:(CGFloat)height title:(NSString *)title font:(UIFont*)font;
 + (NSMutableAttributedString *)colerString:(NSString *)sourceStr allStr:(NSString *)allStr color:(UIColor *)color font:(UIFont *)font;
+//带有图片的文本
++ (NSMutableAttributedString *)colerString:(NSString *)firstStr secondStr:(NSString *)secondStr allStr:(NSString *)allStr firstColor:(UIColor *)firstColor secondColor:(UIColor *)secondColor font:(UIFont *)font imageName:(NSString *)imageName imageBounds:(CGRect)rectImage;
+//带有图片的文本
++ (NSMutableAttributedString *)colerString:(NSString *)sourceStr allStr:(NSString *)allStr color:(UIColor *)color font:(UIFont *)font imageName:(NSString *)imageName imageBounds:(CGRect)rectImage isFirstIndex:(BOOL)firstIndex;
+
 /**
  *  改变行间距
  */

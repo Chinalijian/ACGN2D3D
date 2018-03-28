@@ -175,7 +175,79 @@
     UIFont *fontStr = font;
     NSRange strRange = [textString rangeOfString:colorString];
     NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:textString];
+    
+    if (color == nil) {
+        //[attributeString setAttributes:@{NSFontAttributeName: fontStr} range:strRange];
+    } else {
+        [attributeString setAttributes:@{NSFontAttributeName: fontStr, NSForegroundColorAttributeName: colorStr} range:strRange];
+    }
+    
+    return attributeString;
+}
+
++ (NSMutableAttributedString *)colerString:(NSString *)firstStr secondStr:(NSString *)secondStr allStr:(NSString *)allStr firstColor:(UIColor *)firstColor secondColor:(UIColor *)secondColor font:(UIFont *)font imageName:(NSString *)imageName imageBounds:(CGRect)rectImage {
+    
+    NSString *firstString = firstStr;
+    NSString *secondString = secondStr;
+    NSString *textString = allStr;
+    
+    UIColor *firstColorStr = firstColor;
+    UIColor *secondColorStr = secondColor;
+    
+    UIFont *fontStr = font;
+    
+    NSRange strFirstRange = [textString rangeOfString:firstString];
+    NSRange strSecondRange = [textString rangeOfString:secondString];
+    
+    NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:textString];
+    
+    if (firstColorStr == nil) {
+        //[attributeString setAttributes:@{NSFontAttributeName: fontStr} range:strRange];
+    } else {
+        [attributeString setAttributes:@{NSFontAttributeName: fontStr, NSForegroundColorAttributeName: firstColorStr} range:strFirstRange];
+    }
+    if (secondColorStr == nil) {
+        //[attributeString setAttributes:@{NSFontAttributeName: fontStr} range:strRange];
+    } else {
+        [attributeString setAttributes:@{NSFontAttributeName: fontStr, NSForegroundColorAttributeName: secondColorStr} range:NSMakeRange(firstStr.length, strSecondRange.length)];
+    }
+    
+    if (!STR_IS_NIL(imageName)) {
+        //NSTextAttachment可以将要插入的图片作为特殊字符处理
+        NSTextAttachment *attch = [[NSTextAttachment alloc] init];
+        //定义图片内容及位置和大小
+        attch.image = [UIImage imageNamed:imageName];
+        attch.bounds = rectImage;
+        //创建带有图片的富文本
+        NSAttributedString *string = [NSAttributedString attributedStringWithAttachment:attch];
+        [attributeString insertAttributedString:string atIndex:firstStr.length];
+    }
+
+    
+    return attributeString;
+}
+//带有图片的文本
++ (NSMutableAttributedString *)colerString:(NSString *)sourceStr allStr:(NSString *)allStr color:(UIColor *)color font:(UIFont *)font imageName:(NSString *)imageName imageBounds:(CGRect)rectImage isFirstIndex:(BOOL)firstIndex {
+    NSString *colorString = sourceStr;
+    NSString *textString = allStr;
+    UIColor *colorStr = color;
+    UIFont *fontStr = font;
+    NSRange strRange = [textString rangeOfString:colorString];
+    NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:textString];
     [attributeString setAttributes:@{NSFontAttributeName: fontStr, NSForegroundColorAttributeName: colorStr} range:strRange];
+    //NSTextAttachment可以将要插入的图片作为特殊字符处理
+    NSTextAttachment *attch = [[NSTextAttachment alloc] init];
+    //定义图片内容及位置和大小
+    attch.image = [UIImage imageNamed:imageName];
+    attch.bounds = rectImage;
+    //创建带有图片的富文本
+    NSAttributedString *string = [NSAttributedString attributedStringWithAttachment:attch];
+    if (firstIndex) {
+        [attributeString insertAttributedString:string atIndex:0];
+    } else {
+        [attributeString appendAttributedString:string];
+    }
+    
     return attributeString;
 }
 /**

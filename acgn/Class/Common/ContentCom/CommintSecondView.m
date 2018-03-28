@@ -59,9 +59,26 @@
     [self getColorStr:userName otherName:otherName content:content label:self.thirdLabel];
 }
 
+- (void)setContentForFirstLabelForRole:(NSString *)userName
+                      otherName:(NSString *)otherName
+                        content:(NSString *)content {
+    [self getHasRoleColorStr:userName otherName:otherName content:content label:self.firstLabel];
+}
+- (void)setContentForSecondLabelForRole:(NSString *)userName
+                       otherName:(NSString *)otherName
+                         content:(NSString *)content {
+    [self getHasRoleColorStr:userName otherName:otherName content:content label:self.secondLabel];
+}
+- (void)setContentForThirdLabelForRole:(NSString *)userName
+                      otherName:(NSString *)otherName
+                        content:(NSString *)content {
+    [self getHasRoleColorStr:userName otherName:otherName content:content label:self.thirdLabel];
+}
+
+
 - (void)getColorStr:(NSString *)userName
-                                 otherName:(NSString *)otherName
-                                   content:(NSString *)content label:(UILabel *)label {
+          otherName:(NSString *)otherName
+            content:(NSString *)content label:(UILabel *)label {
     NSString *colorStr = [NSString stringWithFormat:@"%@ @%@：",userName,otherName];
     NSString *contentAll = [NSString stringWithFormat:@"%@ @%@：%@",userName,otherName,content];
     NSMutableAttributedString *str = [ATools colerString:colorStr allStr:contentAll color:UIColorFromRGB(0xE96A79) font: [UIFont systemFontOfSize:13]];
@@ -70,6 +87,51 @@
         make.height.mas_offset(H);
     }];
     label.attributedText = str;
+}
+
+- (void)getHasRoleColorStr:(NSString *)userName
+          otherName:(NSString *)otherName
+            content:(NSString *)content label:(UILabel *)label {
+    
+    NSString *colorUserNameStr = [NSString stringWithFormat:@"%@ @ ",userName];
+    NSString *colorOtherNameStr = [NSString stringWithFormat:@"%@",userName];
+    NSString *contentAll = [NSString stringWithFormat:@"%@%@：%@",colorUserNameStr,colorOtherNameStr,content];
+    NSMutableAttributedString *str = [ATools colerString:colorUserNameStr secondStr:colorOtherNameStr allStr:contentAll firstColor:UIColorFromRGB(0xE96A79) secondColor:UIColorFromRGB(0x3580E6) font:[UIFont systemFontOfSize:13] imageName:@"jiaose_icon" imageBounds:CGRectMake(0, -3, 15, 15)];
+    
+    //[ATools colerString:colorStr allStr:contentAll color:UIColorFromRGB(0xE96A79) font: [UIFont systemFontOfSize:13]];
+    CGFloat H = [self getContentHeight:contentAll];
+    [label mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.height.mas_offset(H+0.5);
+    }];
+
+    label.attributedText = str;
+
+//    NSString *colorUserNameStr = [NSString stringWithFormat:@"%@ @ ",userName];
+//    NSMutableAttributedString *userNameStr = [ATools colerString:colorUserNameStr allStr:colorUserNameStr color:UIColorFromRGB(0xE96A79) font: [UIFont systemFontOfSize:13]];
+//    NSString *colorOtherNameStr = otherName;
+//    NSMutableAttributedString *otherNameStr = [ATools colerString:colorOtherNameStr allStr:colorOtherNameStr color:UIColorFromRGB(0x3580E6) font: [UIFont systemFontOfSize:13] imageName:@"jiaose_icon" imageBounds:CGRectMake(0, -2, 15, 15) isFirstIndex:YES];
+//    NSString *colorContentStr = [NSString stringWithFormat:@"：%@", content];
+//    NSMutableAttributedString *contentStr = [ATools colerString:colorContentStr allStr:colorContentStr color:UIColorFromRGB(0x000000) font: [UIFont systemFontOfSize:13]];
+//
+//    NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] init];
+//    [attributeString appendAttributedString:userNameStr];
+//    [attributeString appendAttributedString:otherNameStr];
+//    [attributeString appendAttributedString:contentStr];
+//
+////    NSString *anotherString=[attributeString string];
+//    NSString *contentAll = [NSString stringWithFormat:@"%@%@%@",colorUserNameStr,colorOtherNameStr,colorContentStr];
+//
+//    CGFloat H = [self getContentHeight:[contentAll stringByAppendingString:@"     "]];
+//    [label mas_updateConstraints:^(MASConstraintMaker *make) {
+//        make.height.mas_offset(H);
+//    }];
+//
+//    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+//    [paragraphStyle setLineBreakMode: NSLineBreakByCharWrapping];
+//    [paragraphStyle setLineSpacing:0];
+//    [attributeString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, [contentAll length])];
+//
+//    label.attributedText = attributeString;
 }
 
 - (void)getColorStr:(NSString *)userName
@@ -112,7 +174,7 @@
     if (STR_IS_NIL(content)) {
         return 0;
     }
-    CGFloat H = [ATools getHeightByWidth:self.widthLabel-20 title:content font: [UIFont systemFontOfSize:13]];
+    CGFloat H = [ATools getHeightByWidth:self.widthLabel-0 title:content font: [UIFont systemFontOfSize:13]];
     return H;
 }
 
