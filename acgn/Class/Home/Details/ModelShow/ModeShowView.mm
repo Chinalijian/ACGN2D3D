@@ -64,7 +64,8 @@
         make.left.mas_equalTo(self.mas_left).mas_offset(0);
         make.right.mas_equalTo(self.mas_right).mas_offset(-0);
         make.bottom.mas_equalTo(self.mas_bottom).mas_offset(-[ATools setViewFrameBottomForIPhoneX:30]);
-        make.top.mas_equalTo(self).mas_offset([ATools setViewFrameYForIPhoneX:64]);
+        make.top.mas_equalTo(self).mas_offset([ATools setViewFrameYForIPhoneX:0]);
+//        make.top.mas_equalTo(self).mas_offset([ATools setViewFrameYForIPhoneX:64]);
     }];
     
     [self.progressView mas_makeConstraints:^(MASConstraintMaker *make) {
