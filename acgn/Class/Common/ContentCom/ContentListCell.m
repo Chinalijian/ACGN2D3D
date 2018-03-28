@@ -193,12 +193,20 @@
             }
             for (int i = 0; i < count; i++) {
                 DynamicCommentSecondData *seObj = [dynamicObj.secondView objectAtIndex:i];
-                NSString *content = [NSString stringWithFormat:@"%@@%@:%@",seObj.userName,seObj.otherName,seObj.commentContext];
+                
                 if (seObj.secondIsRole.integerValue == 1) {
-                    [content stringByAppendingString:@"     "];
+//                    [content stringByAppendingString:@"        "];
+                    NSString *content = [NSString stringWithFormat:@"%@ @ %@：%@",seObj.userName,seObj.otherName,seObj.commentContext];
+//                    CGFloat h = [ATools getHeightByWidth:Info_Width-SecondView_LeftRight_SPace*2-16 title:content font:Commit_Font]+.5;
+                    CGFloat h = [ATools getHeightByWidth:Info_Width-16 title:content font:Commit_Font]+.5;
+                    commitListH = commitListH + h;
+                } else {
+                    NSString *content = [NSString stringWithFormat:@"%@ @%@：%@",seObj.userName,seObj.otherName,seObj.commentContext];
+//                    CGFloat h = [ATools getHeightByWidth:Info_Width-SecondView_LeftRight_SPace*2 title:content font:Commit_Font];
+                    CGFloat h = [ATools getHeightByWidth:Info_Width title:content font:Commit_Font];
+                    commitListH = commitListH + h;
                 }
-                CGFloat h = [ATools getHeightByWidth:Info_Width-SecondView_LeftRight_SPace*2 title:content font:Commit_Font];
-                commitListH = commitListH + h;
+                
                 if (i == 2) {
                     break;
                 }

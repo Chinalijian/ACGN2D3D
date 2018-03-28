@@ -94,18 +94,18 @@
             content:(NSString *)content label:(UILabel *)label {
     
     NSString *colorUserNameStr = [NSString stringWithFormat:@"%@ @ ",userName];
-    NSString *colorOtherNameStr = [NSString stringWithFormat:@"%@",userName];
+    NSString *colorOtherNameStr = [NSString stringWithFormat:@"%@",otherName];
     NSString *contentAll = [NSString stringWithFormat:@"%@%@：%@",colorUserNameStr,colorOtherNameStr,content];
-    NSMutableAttributedString *str = [ATools colerString:colorUserNameStr secondStr:colorOtherNameStr allStr:contentAll firstColor:UIColorFromRGB(0xE96A79) secondColor:UIColorFromRGB(0x3580E6) font:[UIFont systemFontOfSize:13] imageName:@"jiaose_icon" imageBounds:CGRectMake(0, -3, 15, 15)];
+    NSMutableAttributedString *str = [ATools colerString:colorUserNameStr secondStr:colorOtherNameStr allStr:contentAll firstColor:UIColorFromRGB(0xE96A79) secondColor:UIColorFromRGB(0x3580E6) font:[UIFont systemFontOfSize:13] imageName:@"jiaose_icon" imageBounds:CGRectMake(0, -4, 16, 16)];
     
     //[ATools colerString:colorStr allStr:contentAll color:UIColorFromRGB(0xE96A79) font: [UIFont systemFontOfSize:13]];
-    CGFloat H = [self getContentHeight:contentAll];
+    CGFloat H = [self getContentHeightHasRole:contentAll imageWidth:16];
     [label mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.mas_offset(H+0.5);
+        make.height.mas_offset(H+.5);
     }];
 
     label.attributedText = str;
-
+    
 //    NSString *colorUserNameStr = [NSString stringWithFormat:@"%@ @ ",userName];
 //    NSMutableAttributedString *userNameStr = [ATools colerString:colorUserNameStr allStr:colorUserNameStr color:UIColorFromRGB(0xE96A79) font: [UIFont systemFontOfSize:13]];
 //    NSString *colorOtherNameStr = otherName;
@@ -168,7 +168,13 @@
     }];
     label.attributedText = str;
 }
-
+- (CGFloat)getContentHeightHasRole:(NSString *)content imageWidth:(CGFloat)imageW {
+    if (STR_IS_NIL(content)) {
+        return 0;
+    }
+    CGFloat H = [ATools getHeightByWidth:self.widthLabel-imageW title:content font: [UIFont systemFontOfSize:13]];
+    return H;
+}
 
 - (CGFloat)getContentHeight:(NSString *)content {
     if (STR_IS_NIL(content)) {
@@ -211,19 +217,19 @@
         make.top.mas_equalTo(self).mas_offset(15);
         make.left.mas_equalTo(self).mas_offset(10);
         make.width.mas_offset(self.widthLabel-20);
-        make.height.mas_offset(15);
+        make.height.mas_offset(16);
     }];
     [self.secondLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_firstLabel.mas_bottom).mas_offset(15);
         make.left.mas_equalTo(self).mas_offset(10);
         make.width.mas_offset(self.widthLabel-20);
-        make.height.mas_offset(15);
+        make.height.mas_offset(16);
     }];
     [self.thirdLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_secondLabel.mas_bottom).mas_offset(15);
         make.left.mas_equalTo(self).mas_offset(10);
         make.width.mas_offset(self.widthLabel-20);
-        make.height.mas_offset(15);
+        make.height.mas_offset(16);
     }];
     [self.totalLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(_thirdLabel.mas_bottom).mas_offset(15);
@@ -240,7 +246,7 @@
         _firstLabel.textAlignment = NSTextAlignmentLeft;
         _firstLabel.textColor = UIColorFromRGB(0x000000);
         _firstLabel.font = [UIFont systemFontOfSize:13];
-        _firstLabel.lineBreakMode = NSLineBreakByClipping;
+        _firstLabel.lineBreakMode = NSLineBreakByCharWrapping;
         _firstLabel.numberOfLines = 0;
     }
     return _firstLabel;
@@ -252,7 +258,7 @@
         _secondLabel.textAlignment = NSTextAlignmentLeft;
         _secondLabel.textColor = UIColorFromRGB(0x000000);
         _secondLabel.font = [UIFont systemFontOfSize:13];
-        _secondLabel.lineBreakMode = NSLineBreakByClipping;
+        _secondLabel.lineBreakMode = NSLineBreakByCharWrapping;
         _secondLabel.numberOfLines = 0;
     }
     return _secondLabel;
@@ -264,7 +270,7 @@
         _thirdLabel.textAlignment = NSTextAlignmentLeft;
         _thirdLabel.textColor = UIColorFromRGB(0x000000);
         _thirdLabel.font = [UIFont systemFontOfSize:13];
-        _thirdLabel.lineBreakMode = NSLineBreakByClipping;
+        _thirdLabel.lineBreakMode = NSLineBreakByCharWrapping;
         _thirdLabel.numberOfLines = 0;
     }
     return _thirdLabel;

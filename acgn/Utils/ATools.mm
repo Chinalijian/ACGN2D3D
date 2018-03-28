@@ -222,7 +222,6 @@
         NSAttributedString *string = [NSAttributedString attributedStringWithAttachment:attch];
         [attributeString insertAttributedString:string atIndex:firstStr.length];
     }
-
     
     return attributeString;
 }
