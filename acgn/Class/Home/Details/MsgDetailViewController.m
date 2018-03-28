@@ -111,6 +111,9 @@
     
 }
 - (void)sendMsgObj:(DynamicCommentListData *)obj index:(NSInteger)index {
+    if (OBJ_IS_NIL(self.resultData)) {
+        self.resultData = [[DynamicCommentListData alloc] init];
+    }
     self.resultData.type = @"2";
     self.resultData.parentCommentId = obj.commentId;
     self.resultData.postId = obj.postId;
