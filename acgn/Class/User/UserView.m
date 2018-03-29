@@ -47,7 +47,8 @@
         self.topView.logoImageView.image = [UIImage imageNamed:@"public_logo"];
         self.logoutButton.hidden = YES;
     } else {
-        [self.topView.logoImageView sd_setImageWithURL:[NSURL URLWithString:[AccountInfo getUserHeadUrl]] placeholderImage:[UIImage imageNamed:@"public_logo"]];
+        NSString * imageUrl = [[AccountInfo getUserHeadUrl] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        [self.topView.logoImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:[UIImage imageNamed:@"public_logo"]];
         self.topView.logoNameLabel.text = [AccountInfo getUserName];
         self.logoutButton.hidden = NO;
     }
