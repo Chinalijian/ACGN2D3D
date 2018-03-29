@@ -32,5 +32,6 @@
 @interface ContentListCell : UITableViewCell
 @property (nonatomic, weak) id <ContentListCellDelegate> delegate;
 - (void)configDynamicObj:(DynamicCommentListData *)obj;
+- (void)configDynamicObj:(DynamicCommentListData *)obj msgDetails:(BOOL)msgDetailPage index:(NSInteger)index;
 + (CGFloat)getCellMaxHeightAndUpdate:(DynamicCommentListData *)dynamicObj;
 @end

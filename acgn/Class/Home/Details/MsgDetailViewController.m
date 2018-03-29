@@ -191,7 +191,7 @@
     }
     if (indexPath.row < self.datas.count) {
         DynamicCommentListData *data = [self.datas objectAtIndex:indexPath.row];
-        [cell configDynamicObj:data];
+        [cell configDynamicObj:data msgDetails:YES index:indexPath.row];
     }
     if (indexPath.row == 0) {
         cell.backgroundColor = UIColorFromRGB(0xF5FAFD);
