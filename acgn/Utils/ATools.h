@@ -33,6 +33,8 @@
 //带有图片的文本
 + (NSMutableAttributedString *)colerString:(NSString *)sourceStr allStr:(NSString *)allStr color:(UIColor *)color font:(UIFont *)font imageName:(NSString *)imageName imageBounds:(CGRect)rectImage isFirstIndex:(BOOL)firstIndex;
 
++ (CGSize)calculateImageRect:(CGFloat)w height:(CGFloat)h image:(UIImage *)image imageView:(UIImageView *)imageView;
+
 /**
  *  改变行间距
  */
@@ -73,7 +75,8 @@
 
 //加载图片
 + (void)loadImageUrlForImageView:(UIImageView *)imageV imageUrl:(NSString *)url;
-
+//加载图片
++ (void)loadImageUrlForImageView:(UIImageView *)imageV imageUrl:(NSString *)url block:(void(^)(BOOL result))block;
 @end
 
 

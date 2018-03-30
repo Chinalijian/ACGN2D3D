@@ -200,7 +200,29 @@
 //    [ATools changeLineSpaceForLabel:self.contentLabel WithSpace:5];
 //    NSString * imageUrl = [obj.imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
 //    [self.peopleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil];
+    
     [ATools loadImageUrlForImageView:self.peopleImageView imageUrl:obj.imageUrl];
+    
+//    WS(weakSelf);
+//    [ATools loadImageUrlForImageView:self.peopleImageView imageUrl:obj.imageUrl block:^(BOOL result) {
+//        if (result) {
+//            CGSize sizeImage = [ATools calculateImageRect:PeopleImage_Width height:PeopleImage_Height image:self.peopleImageView.image imageView:self.peopleImageView];
+//            if (sizeImage.width != PeopleImage_Width || sizeImage.height != PeopleImage_Height) {
+//                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+//                    //do something.....
+//                    CGFloat rightValue = PeopleImage_Width > sizeImage.width ? (PeopleImage_Width-sizeImage.width)/2 : 0;
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        [weakSelf.peopleImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+//                            make.right.mas_equalTo(self.contentView).mas_offset(-20-rightValue);
+//                            make.height.mas_offset(sizeImage.height);
+//                            make.width.mas_offset(sizeImage.width);
+//                        }];
+//                    });
+//                });
+//            }
+//        }
+//    }];
+
     [self.attButton setTitle:obj.seeNum forState:UIControlStateNormal];
     [self.comButton setTitle:obj.commentNum forState:UIControlStateNormal];
     [self.praButton setTitle:obj.fabulousNum forState:UIControlStateNormal];

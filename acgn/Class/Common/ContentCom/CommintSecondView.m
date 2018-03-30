@@ -186,6 +186,10 @@
 
 - (void)setTotalLabelNumber:(NSInteger)count {
     self.totalLabel.text = [NSString stringWithFormat:@"共%ld条回复", count];
+    self.totalLabel.hidden = NO;
+    self.firstLabel.hidden = NO;
+    self.secondLabel.hidden = NO;
+    self.thirdLabel.hidden = NO;
 }
 
 - (void)hiddenLabel:(NSInteger)count {

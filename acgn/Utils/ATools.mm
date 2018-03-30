@@ -249,6 +249,30 @@
     
     return attributeString;
 }
+
++ (CGSize)calculateImageRect:(CGFloat)w height:(CGFloat)h image:(UIImage *)image imageView:(UIImageView *)imageView {
+    //得到当前Image的frame
+    CGSize imageSize = image.size;
+    //得到当前ImageView 的frame
+    CGRect imageVRect = imageView.frame;
+    //image的宽度大于当前视图的宽度
+    if(imageSize.width > w)
+    {
+        //根据宽度计算高度，确定宽度
+        imageVRect.size.height = w * imageSize.height / imageSize.width;
+        imageVRect.size.width = w;
+    }
+    //image的高度大于当前视图的高度
+    if(imageVRect.size.height > h)
+    {
+        //根据高度计算宽度，确定宽度
+        imageVRect.size.width = h * imageVRect.size.width / imageVRect.size.height;
+        imageVRect.size.height = h;
+    }
+    
+    return imageVRect.size;
+}
+
 /**
  *  改变行间距
  */
@@ -456,7 +480,29 @@
         }
     }];
 }
-
+//加载图片
++ (void)loadImageUrlForImageView:(UIImageView *)imageV imageUrl:(NSString *)url block:(void(^)(BOOL result))block {
+    if (OBJ_IS_NIL(imageV)) {
+        return;
+    }
+    if (STR_IS_NIL(url)) {
+        imageV.image = Default_Placeholder_Image;
+        return;
+    }
+    imageV.contentMode = UIViewContentModeCenter;
+    NSString * imageUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [imageV sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:Default_PlaceholderLoading_Image completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        if (image) {
+            imageV.contentMode = UIViewContentModeScaleAspectFill;
+            if (image) {
+                imageV.image = image;
+                block(YES);
+            } else {
+                imageV.image = Default_Placeholder_Image;
+            }
+        }
+    }];
+}
 @end
 
 

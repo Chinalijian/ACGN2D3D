@@ -24,7 +24,7 @@
 @end
 
 @implementation ContentListCell
-
+#define Default_Show_Count 3
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -131,8 +131,8 @@
             DynamicCommentSecondData *csData3 = [obj.secondView objectAtIndex:2];
             [self setSecondViewThirdInfo:csData3];
         }
-        if (count > 3) {
-            [self.secondView setTotalLabelNumber:count];
+        if (obj.commentNum.integerValue > Default_Show_Count) {
+            [self.secondView setTotalLabelNumber:obj.commentNum.integerValue];
         }
         [self.timeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.bottom.mas_equalTo(self.mas_bottom).offset(-5);
@@ -225,7 +225,7 @@
         NSInteger count = dynamicObj.secondView.count;
         if (count > 0) {
             CGFloat commitListH = 0;//
-            if (count > 3) {
+            if (dynamicObj.commentNum.integerValue > Default_Show_Count) {
                 commitListH = 15*4 + 28;
             } else {
                 commitListH = 15 * (count+1);
@@ -246,7 +246,7 @@
                     commitListH = commitListH + h;
                 }
                 
-                if (i == 2) {
+                if (i == (Default_Show_Count-1)) {
                     break;
                 }
             }
