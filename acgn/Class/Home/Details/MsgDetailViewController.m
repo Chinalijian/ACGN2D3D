@@ -115,7 +115,7 @@
         self.resultData = [[DynamicCommentListData alloc] init];
     }
     self.resultData.type = @"2";
-    self.resultData.parentCommentId = obj.commentId;
+    self.resultData.parentCommentId = self.firstData.commentId;
     self.resultData.postId = obj.postId;
     self.resultData.replyId = obj.commentId;
     self.resultData.isRole = obj.isRole;
