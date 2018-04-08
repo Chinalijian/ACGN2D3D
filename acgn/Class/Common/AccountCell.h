@@ -13,6 +13,7 @@ typedef void (^BlockClickTextField)(BOOL displayKeyBoard);
 @interface AccountCell : UITableViewCell
 @property (nonatomic, strong) BlockClickTextField clickTextFieldBlock;
 @property (nonatomic, strong) UIView *bgView;
+@property (nonatomic, strong) UITextField *contentTextField;
 - (void)configInfo:(AccountLocalDataModel *)obj;
 - (void)textSwitchSecure:(BOOL)s;
 @end

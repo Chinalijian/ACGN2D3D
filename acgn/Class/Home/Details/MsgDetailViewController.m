@@ -13,7 +13,8 @@
 @property (nonatomic, strong) UITableView *mTableView;
 @property (nonatomic, strong) NSString *lastID;
 @property (nonatomic, strong) SendMsgInputTextView *inputView;
-
+@property (nonatomic, strong) DynamicCommentListData *firstData;
+@property (nonatomic, strong) DynamicCommentListData *resultData;
 @property (nonatomic, strong) UIView *hiddenInputView;
 
 @end
@@ -27,6 +28,7 @@
     [self setNavigationBarTransparence:NO
                             titleColor:[UIColor blackColor]];
     self.datas = [NSMutableArray array];
+    self.resultData = [[DynamicCommentListData alloc] init];
     [self loadUI];
     [self addRefreshLoadMore:self.mTableView];
 
@@ -50,7 +52,7 @@
     CGFloat HX = 0;
     CGFloat HI = 0;
     if (IS_IPHONE_X) {
-        HX = 35;
+        HX = 35+25;
         HI = 17;
     }
     CGRect statusBarRect = [[UIApplication sharedApplication] statusBarFrame];
@@ -84,15 +86,23 @@
 
 - (void)loadData {
     WS(weakSelf);
-    [AApiModel getGetCommentDetailsData:self.obj.commentId lastId:self.lastID block:^(BOOL result, NSArray *array) {
+    [AApiModel getGetCommentDetailsData:self.obj.commentId lastId:self.lastID block:^(BOOL result, MsgCommitData *obj) {
         if (result) {
-            if (array.count > 0) {
+            if (!OBJ_IS_NIL(obj)) {
                 if (weakSelf.lastID.integerValue == -1) {
                     [weakSelf.datas removeAllObjects];
+                    if (!OBJ_IS_NIL(obj.firstComment)) {
+                        weakSelf.firstData = obj.firstComment;
+                        [weakSelf.datas addObject:obj.firstComment];
+                        [weakSelf.inputView setAlpLabel:obj.firstComment.userName];
+                        [weakSelf sendMsgObj:weakSelf.firstData index:0];
+                    }
                 }
-                [weakSelf.datas addObjectsFromArray:array];
-                DynamicCommentListData *data = [weakSelf.datas lastObject];
-                weakSelf.lastID = data.commentId;
+                if (obj.secondComment.count > 0) {
+                    [weakSelf.datas addObjectsFromArray:obj.secondComment];
+                    DynamicCommentListData *data = [weakSelf.datas lastObject];
+                    weakSelf.lastID = data.commentId;
+                }
             }
             [weakSelf.mTableView reloadData];
         }
@@ -100,24 +110,45 @@
     }];
     
 }
+- (void)sendMsgObj:(DynamicCommentListData *)obj index:(NSInteger)index {
+    if (OBJ_IS_NIL(self.resultData)) {
+        self.resultData = [[DynamicCommentListData alloc] init];
+    }
+    self.resultData.type = @"2";
+    self.resultData.parentCommentId = self.firstData.commentId;
+    self.resultData.postId = obj.postId;
+    self.resultData.replyId = obj.commentId;
+    self.resultData.isRole = obj.isRole;
+    self.resultData.replyContext = obj.commentContext;
+    self.resultData.replyUid = [AccountInfo getUserID];
+    if (obj.isRole.integerValue == 1) {//角色
+        self.resultData.roleId = obj.roleId;
+        if (index == 0) {
+            self.resultData.commentUid = @"0";
+        } else {
+            self.resultData.commentUid = self.firstData.commentUid;
+        }
+    } else {
+        self.resultData.roleId = @"0";
+        if (index == 0) {
+            self.resultData.commentUid = obj.commentUid;
+        } else {
+            self.resultData.commentUid = obj.replyUid;
+        }
+    }
+}
 
 - (void)inputContent:(NSString *)content {
-    DynamicCommentListData *resultData = [[DynamicCommentListData alloc] init];
-    resultData.replyContext = self.obj.commentContext;
-    resultData.commentContext = content;
-    resultData.commentUid = self.obj.commentUid;
-    resultData.isRole = self.obj.isRole;
-    resultData.parentCommentId = self.obj.commentId;
-    resultData.postId = self.obj.postId;
-    resultData.replyId = self.obj.commentId;
-    resultData.replyUid = self.obj.commentUid;
-    resultData.roleId = self.obj.roleId;
-    resultData.type = @"2";
-
+    if (OBJ_IS_NIL(self.resultData)) {
+        [ATools showSVProgressHudCustom:@"" title:@"请编辑内容进行吐槽"];
+        return;
+    }
+    self.resultData.commentContext = content;
     WS(weakSelf);
-    [AApiModel addCommentForUser:resultData block:^(BOOL result) {
+    [AApiModel addCommentForUser:self.resultData block:^(BOOL result) {
         if (result) {
             [weakSelf.inputView cleanTextInfo];
+            weakSelf.resultData = nil;
             [weakSelf refresh];
         }
     }];
@@ -126,6 +157,11 @@
 #pragma mark UITableView Delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (indexPath.row < self.datas.count) {
+        DynamicCommentListData *obj = [self.datas objectAtIndex:indexPath.row];
+        [self.inputView setAlpLabel:obj.userName];
+        [self sendMsgObj:obj index:indexPath.row];
+    }
 }
 
 #pragma mark UITableView Datasource
@@ -155,7 +191,7 @@
     }
     if (indexPath.row < self.datas.count) {
         DynamicCommentListData *data = [self.datas objectAtIndex:indexPath.row];
-        [cell configDynamicObj:data];
+        [cell configDynamicObj:data msgDetails:YES index:indexPath.row];
     }
     if (indexPath.row == 0) {
         cell.backgroundColor = UIColorFromRGB(0xF5FAFD);

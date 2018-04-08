@@ -212,27 +212,70 @@
     if (!cell) {
         cell = [[AccountCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:accCell];
     }
-    
     [cell configInfo:[self.datas objectAtIndex:indexPath.row]];
-    
-    if (self.aType == AAccountType_Login) {
-        if (indexPath.row == 1) {
-            [cell textSwitchSecure:YES];
-        } else {
+    cell.contentTextField.keyboardType = UIKeyboardTypeDefault;
+    switch (self.aType) {
+        case AAccountType_Login:
+            if (indexPath.row == 0) {
+                //数字键盘
+                cell.contentTextField.keyboardType = UIKeyboardTypePhonePad;
+            }
+            if (indexPath.row == 1) {
+                [cell textSwitchSecure:YES];
+            } else {
+                [cell textSwitchSecure:NO];
+            }
+            break;
+        case AAccountType_Register:
             [cell textSwitchSecure:NO];
-        }
-    } else if (self.aType == AAccountType_SetPsd || self.aType == AAccountType_ChangePsd) {
-        [cell textSwitchSecure:YES];
-    } else {
-        [cell textSwitchSecure:NO];
+            if (indexPath.row == 0) {
+                //数字键盘
+                cell.contentTextField.keyboardType = UIKeyboardTypePhonePad;
+            }
+            if (indexPath.row == 1) {
+                [cell.bgView layoutIfNeeded];
+                [self initGetCodeButton:cell.bgView];
+                //数字键盘
+                cell.contentTextField.keyboardType = UIKeyboardTypePhonePad;
+            }
+            break;
+        case AAccountType_ResetPsd:
+            [cell textSwitchSecure:NO];
+            //if (indexPath.row == 0) {
+                //数字键盘
+                cell.contentTextField.keyboardType = UIKeyboardTypePhonePad;
+            //}
+            if (indexPath.row == 1) {
+                [cell.bgView layoutIfNeeded];
+                [self initGetCodeButton:cell.bgView];
+            }
+            break;
+        case AAccountType_SetPsd:
+            [cell textSwitchSecure:YES];
+            break;
+        case AAccountType_NickName:
+            [cell textSwitchSecure:NO];
+            break;
+        case AAccountType_ChangePsd:
+            [cell textSwitchSecure:YES];
+            break;
+        case AAccountType_BindPhone:
+            [cell textSwitchSecure:NO];
+            if (indexPath.row == 0) {
+                //数字键盘
+                cell.contentTextField.keyboardType = UIKeyboardTypePhonePad;
+            }
+            if (indexPath.row == 1) {
+                [cell.bgView layoutIfNeeded];
+                [self initGetCodeButton:cell.bgView];
+                //数字键盘
+                cell.contentTextField.keyboardType = UIKeyboardTypePhonePad;
+            }
+            break;
+        default:
+            break;
     }
-    
-    if (self.aType == AAccountType_Register || self.aType == AAccountType_ResetPsd || self.aType == AAccountType_BindPhone) {
-        if (indexPath.row == 1) {
-            [cell.bgView layoutIfNeeded];
-            [self initGetCodeButton:cell.bgView];
-        }
-    }
+
     return cell;
 }
 

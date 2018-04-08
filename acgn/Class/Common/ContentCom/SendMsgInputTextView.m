@@ -66,7 +66,7 @@
     editIconImage.image = [UIImage imageNamed:@"edit_pen_icon"];
     [_bottomView addSubview:editIconImage];
     
-    UILabel *alpLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, editInfoView.frame.origin.y, 100, editInfoView.frame.size.height)];
+    UILabel *alpLabel = [[UILabel alloc] initWithFrame:CGRectMake(50, editInfoView.frame.origin.y, 200, editInfoView.frame.size.height)];
     alpLabel.text = @"各种吐槽尽管来";
     alpLabel.textColor = UIColorFromRGB(0x939393);
     alpLabel.font = [UIFont systemFontOfSize:13];
@@ -137,6 +137,10 @@
 - (void)cleanTextInfo {
     _textView.text = @"";
     _alpLabel.hidden = NO;
+}
+
+- (void)setAlpLabel:(NSString *)name {
+    _alpLabel.text = [NSString stringWithFormat:@"吐槽@%@", name];
 }
 
 #pragma mark - 事件监听

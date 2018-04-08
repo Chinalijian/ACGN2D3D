@@ -175,9 +175,104 @@
     UIFont *fontStr = font;
     NSRange strRange = [textString rangeOfString:colorString];
     NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:textString];
-    [attributeString setAttributes:@{NSFontAttributeName: fontStr, NSForegroundColorAttributeName: colorStr} range:strRange];
+    
+    if (color == nil) {
+        //[attributeString setAttributes:@{NSFontAttributeName: fontStr} range:strRange];
+    } else {
+        [attributeString setAttributes:@{NSFontAttributeName: fontStr, NSForegroundColorAttributeName: colorStr} range:strRange];
+    }
+    
     return attributeString;
 }
+
++ (NSMutableAttributedString *)colerString:(NSString *)firstStr secondStr:(NSString *)secondStr allStr:(NSString *)allStr firstColor:(UIColor *)firstColor secondColor:(UIColor *)secondColor font:(UIFont *)font imageName:(NSString *)imageName imageBounds:(CGRect)rectImage {
+    
+    NSString *firstString = firstStr;
+    NSString *secondString = secondStr;
+    NSString *textString = allStr;
+    
+    UIColor *firstColorStr = firstColor;
+    UIColor *secondColorStr = secondColor;
+    
+    UIFont *fontStr = font;
+    
+    NSRange strFirstRange = [textString rangeOfString:firstString];
+    NSRange strSecondRange = [textString rangeOfString:secondString];
+    
+    NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:textString];
+    
+    if (firstColorStr == nil) {
+        //[attributeString setAttributes:@{NSFontAttributeName: fontStr} range:strRange];
+    } else {
+        [attributeString setAttributes:@{NSFontAttributeName: fontStr, NSForegroundColorAttributeName: firstColorStr} range:strFirstRange];
+    }
+    if (secondColorStr == nil) {
+        //[attributeString setAttributes:@{NSFontAttributeName: fontStr} range:strRange];
+    } else {
+        [attributeString setAttributes:@{NSFontAttributeName: fontStr, NSForegroundColorAttributeName: secondColorStr} range:NSMakeRange(firstStr.length, strSecondRange.length)];
+    }
+    
+    if (!STR_IS_NIL(imageName)) {
+        //NSTextAttachment可以将要插入的图片作为特殊字符处理
+        NSTextAttachment *attch = [[NSTextAttachment alloc] init];
+        //定义图片内容及位置和大小
+        attch.image = [UIImage imageNamed:imageName];
+        attch.bounds = rectImage;
+        //创建带有图片的富文本
+        NSAttributedString *string = [NSAttributedString attributedStringWithAttachment:attch];
+        [attributeString insertAttributedString:string atIndex:firstStr.length];
+    }
+    
+    return attributeString;
+}
+//带有图片的文本
++ (NSMutableAttributedString *)colerString:(NSString *)sourceStr allStr:(NSString *)allStr color:(UIColor *)color font:(UIFont *)font imageName:(NSString *)imageName imageBounds:(CGRect)rectImage isFirstIndex:(BOOL)firstIndex {
+    NSString *colorString = sourceStr;
+    NSString *textString = allStr;
+    UIColor *colorStr = color;
+    UIFont *fontStr = font;
+    NSRange strRange = [textString rangeOfString:colorString];
+    NSMutableAttributedString *attributeString = [[NSMutableAttributedString alloc] initWithString:textString];
+    [attributeString setAttributes:@{NSFontAttributeName: fontStr, NSForegroundColorAttributeName: colorStr} range:strRange];
+    //NSTextAttachment可以将要插入的图片作为特殊字符处理
+    NSTextAttachment *attch = [[NSTextAttachment alloc] init];
+    //定义图片内容及位置和大小
+    attch.image = [UIImage imageNamed:imageName];
+    attch.bounds = rectImage;
+    //创建带有图片的富文本
+    NSAttributedString *string = [NSAttributedString attributedStringWithAttachment:attch];
+    if (firstIndex) {
+        [attributeString insertAttributedString:string atIndex:0];
+    } else {
+        [attributeString appendAttributedString:string];
+    }
+    
+    return attributeString;
+}
+
++ (CGSize)calculateImageRect:(CGFloat)w height:(CGFloat)h image:(UIImage *)image imageView:(UIImageView *)imageView {
+    //得到当前Image的frame
+    CGSize imageSize = image.size;
+    //得到当前ImageView 的frame
+    CGRect imageVRect = imageView.frame;
+    //image的宽度大于当前视图的宽度
+    if(imageSize.width > w)
+    {
+        //根据宽度计算高度，确定宽度
+        imageVRect.size.height = w * imageSize.height / imageSize.width;
+        imageVRect.size.width = w;
+    }
+    //image的高度大于当前视图的高度
+    if(imageVRect.size.height > h)
+    {
+        //根据高度计算宽度，确定宽度
+        imageVRect.size.width = h * imageVRect.size.width / imageVRect.size.height;
+        imageVRect.size.height = h;
+    }
+    
+    return imageVRect.size;
+}
+
 /**
  *  改变行间距
  */
@@ -363,8 +458,51 @@
     return blHave;
 }
 
-
-
+//加载图片
++ (void)loadImageUrlForImageView:(UIImageView *)imageV imageUrl:(NSString *)url {
+    if (OBJ_IS_NIL(imageV)) {
+        return;
+    }
+    if (STR_IS_NIL(url)) {
+        imageV.image = Default_Placeholder_Image;
+        return;
+    }
+    imageV.contentMode = UIViewContentModeCenter;
+    NSString * imageUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [imageV sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:Default_PlaceholderLoading_Image completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        if (image) {
+            imageV.contentMode = UIViewContentModeScaleAspectFill;
+            if (image) {
+                imageV.image = image;
+            } else {
+                imageV.image = Default_Placeholder_Image;
+            }
+        }
+    }];
+}
+//加载图片
++ (void)loadImageUrlForImageView:(UIImageView *)imageV imageUrl:(NSString *)url block:(void(^)(BOOL result))block {
+    if (OBJ_IS_NIL(imageV)) {
+        return;
+    }
+    if (STR_IS_NIL(url)) {
+        imageV.image = Default_Placeholder_Image;
+        return;
+    }
+    imageV.contentMode = UIViewContentModeCenter;
+    NSString * imageUrl = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [imageV sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:Default_PlaceholderLoading_Image completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        if (image) {
+            imageV.contentMode = UIViewContentModeScaleAspectFill;
+            if (image) {
+                imageV.image = image;
+                block(YES);
+            } else {
+                imageV.image = Default_Placeholder_Image;
+            }
+        }
+    }];
+}
 @end
 
 

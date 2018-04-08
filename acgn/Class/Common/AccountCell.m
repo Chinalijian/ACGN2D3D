@@ -11,7 +11,7 @@
 @interface AccountCell ()<UITextFieldDelegate>
 
 @property (nonatomic, strong) UIImageView *titleImageView;
-@property (nonatomic, strong) UITextField *contentTextField;
+
 @property (nonatomic, strong) AccountLocalDataModel *obje;
 @end
 #define X_SPACE 47

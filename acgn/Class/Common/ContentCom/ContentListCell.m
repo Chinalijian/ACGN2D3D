@@ -20,11 +20,11 @@
 @property (nonatomic, strong) UIButton *praiseLabel;
 
 @property (nonatomic, strong) DynamicCommentListData *cellObj;
-
+@property (nonatomic, strong) UILabel *lineLabel;
 @end
 
 @implementation ContentListCell
-
+#define Default_Show_Count 3
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
@@ -51,58 +51,134 @@
     [self.secondView cleanAllSubLabel];
 }
 
+- (void)configDynamicObj:(DynamicCommentListData *)obj msgDetails:(BOOL)msgDetailPage index:(NSInteger)index {
+    if (msgDetailPage) {
+        //吐槽详情
+        self.cellObj = obj;
+        [self cleanSubViewInfo];
+        if (!OBJ_IS_NIL(obj)) {
+            if (index == 0) {
+                [self setFirstUserNameInfo:obj];
+            } else {
+                [self setSecondUserNameInfo:obj];
+            }
+            [self setSubObjInfo:obj];
+        }
+    } else {
+        [self configDynamicObj:obj];
+    }
+}
+
 - (void)configDynamicObj:(DynamicCommentListData *)obj {
     self.cellObj = obj;
     [self cleanSubViewInfo];
     if (!OBJ_IS_NIL(obj)) {
-        NSString *imageUrl = [obj.avatar stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-        [self.headImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:Default_Placeholder_Image];
-        self.nameLabel.text = obj.userName;
-        self.commitLabel.text = obj.commentContext;
-        self.timeLabel.text = obj.commentTime;
-        if (obj.localPraise) {
-            [_praiseLabel setImage:[UIImage imageNamed:@"praise_yellow_icon"] forState:UIControlStateNormal];
-        } else {
-            [_praiseLabel setImage:[UIImage imageNamed:@"praise_grey_icon"] forState:UIControlStateNormal];
-        }
-        [self.praiseLabel setTitle:obj.praiseNum forState:UIControlStateNormal];
-        if (obj.secondView.count > 0) {
-            NSInteger count = obj.secondView.count;
-            [self.secondView hiddenLabel:count];
-            if (count == 1) {
-                DynamicCommentSecondData *csData = [obj.secondView firstObject];
-                [self setSecondViewFirstInfo:csData];
-            } else if (count == 2) {
-                DynamicCommentSecondData *csData1 = [obj.secondView firstObject];
-                [self setSecondViewFirstInfo:csData1];
-                DynamicCommentSecondData *csData2 = [obj.secondView lastObject];
-                [self setSecondViewSecondInfo:csData2];
-            } else {
-                DynamicCommentSecondData *csData1 = [obj.secondView firstObject];
-                [self setSecondViewFirstInfo:csData1];
-                DynamicCommentSecondData *csData2 = [obj.secondView objectAtIndex:1];
-                [self setSecondViewSecondInfo:csData2];
-                DynamicCommentSecondData *csData3 = [obj.secondView objectAtIndex:2];
-                [self setSecondViewThirdInfo:csData3];
-            }
-        }
-        CGFloat commitH = [ContentListCell getCommitContentMaxHeight:obj];
-        CGFloat secondH = [ContentListCell getSecondViewMaxHeight:obj];
-        [self upDateCellLayout:commitH secondHeight:secondH];
-        [self updateCommitContentFrame:commitH];
-        [self updateSecondCommitViewFrame:secondH];
-        [self layoutIfNeeded];
+        [self setFirstUserNameInfo:obj];
+        [self setSubObjInfo:obj];
     }
 }
 
+- (void)setFirstUserNameInfo:(DynamicCommentListData *)obj {
+    NSString *imageUrl = [obj.avatar stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [self.headImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:Default_Placeholder_Image];
+    if (obj.isRole.intValue == 1) {
+        NSMutableAttributedString *str = [ATools colerString:obj.userName allStr:obj.userName color:UIColorFromRGB(0x3580E6) font: [UIFont systemFontOfSize:13] imageName:@"jiaose_icon" imageBounds:CGRectMake(0, -2, NameLabel_H, NameLabel_H) isFirstIndex:YES];
+        self.nameLabel.attributedText = str;
+    } else {
+        self.nameLabel.text = obj.userName;
+    }
+}
+
+- (void)setSecondUserNameInfo:(DynamicCommentListData *)obj {
+    NSString *imageUrl = [obj.avatar stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    [self.headImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:Default_Placeholder_Image];
+    if (obj.secondIsRole.intValue == 1) {
+        NSString *colorUserNameStr = STR_IS_NIL(obj.otherName)?[NSString stringWithFormat:@"%@",obj.userName]:[NSString stringWithFormat:@"%@ @ ",obj.userName];
+        NSString *colorOtherNameStr = STR_IS_NIL(obj.otherName)?@"":[NSString stringWithFormat:@"%@",obj.otherName];
+        NSString *contentAll = [NSString stringWithFormat:@"%@%@",colorUserNameStr,colorOtherNameStr];
+        NSMutableAttributedString *str = [ATools colerString:colorUserNameStr secondStr:colorOtherNameStr allStr:contentAll firstColor:UIColorFromRGB(0xE96A79) secondColor:UIColorFromRGB(0x3580E6) font:[UIFont systemFontOfSize:13] imageName:@"jiaose_icon" imageBounds:CGRectMake(0, -4, 16, 16)];
+        self.nameLabel.attributedText = str;
+    } else {
+        self.nameLabel.text = STR_IS_NIL(obj.otherName)? obj.userName : [NSString stringWithFormat:@"%@ @ %@", obj.userName, obj.otherName];
+    }
+}
+
+- (void)setSubObjInfo:(DynamicCommentListData *)obj {
+    self.commitLabel.text = obj.commentContext;
+    self.timeLabel.text = obj.commentTime;
+    if (obj.localPraise) {
+        [_praiseLabel setImage:[UIImage imageNamed:@"praise_yellow_icon"] forState:UIControlStateNormal];
+    } else {
+        [_praiseLabel setImage:[UIImage imageNamed:@"praise_grey_icon"] forState:UIControlStateNormal];
+    }
+    [self.praiseLabel setTitle:obj.praiseNum forState:UIControlStateNormal];
+    if (obj.secondView.count > 0) {
+        NSInteger count = obj.secondView.count;
+        [self.secondView hiddenLabel:count];
+        if (count == 1) {
+            DynamicCommentSecondData *csData = [obj.secondView firstObject];
+            [self setSecondViewFirstInfo:csData];
+        } else if (count == 2) {
+            DynamicCommentSecondData *csData1 = [obj.secondView firstObject];
+            [self setSecondViewFirstInfo:csData1];
+            DynamicCommentSecondData *csData2 = [obj.secondView lastObject];
+            [self setSecondViewSecondInfo:csData2];
+        } else {
+            DynamicCommentSecondData *csData1 = [obj.secondView firstObject];
+            [self setSecondViewFirstInfo:csData1];
+            DynamicCommentSecondData *csData2 = [obj.secondView objectAtIndex:1];
+            [self setSecondViewSecondInfo:csData2];
+            DynamicCommentSecondData *csData3 = [obj.secondView objectAtIndex:2];
+            [self setSecondViewThirdInfo:csData3];
+        }
+        if (obj.commentNum.integerValue > Default_Show_Count) {
+            [self.secondView setTotalLabelNumber:obj.commentNum.integerValue];
+        }
+        [self.timeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(self.mas_bottom).offset(-5);
+        }];
+        [self.praiseLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(self.mas_bottom).offset(-0);
+        }];
+    } else {
+        [self.secondView hiddenLabel:0];
+        [self.timeLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(self.mas_bottom).offset(-10);
+        }];
+        [self.praiseLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.mas_equalTo(self.mas_bottom).offset(-5);
+        }];
+    }
+    
+    CGFloat commitH = [ContentListCell getCommitContentMaxHeight:obj];
+    CGFloat secondH = [ContentListCell getSecondViewMaxHeight:obj];
+    [self upDateCellLayout:commitH secondHeight:secondH];
+    [self updateCommitContentFrame:commitH];
+    [self updateSecondCommitViewFrame:secondH];
+    [self layoutIfNeeded];
+}
+
 - (void)setSecondViewFirstInfo:(DynamicCommentSecondData *)csData {
-     [self.secondView setContentForFirstLabel:csData.userName otherName:csData.otherName content:csData.commentContext];
+    if (csData.secondIsRole.integerValue == 1) {
+        [self.secondView setContentForFirstLabelForRole:csData.userName otherName:csData.otherName content:csData.commentContext];
+    } else {
+        [self.secondView setContentForFirstLabel:csData.userName otherName:csData.otherName content:csData.commentContext];
+    }
+
 }
 - (void)setSecondViewSecondInfo:(DynamicCommentSecondData *)csData {
-    [self.secondView setContentForSecondLabel:csData.userName otherName:csData.otherName content:csData.commentContext];
+    if (csData.secondIsRole.integerValue == 1) {
+        [self.secondView setContentForSecondLabelForRole:csData.userName otherName:csData.otherName content:csData.commentContext];
+    } else {
+        [self.secondView setContentForSecondLabel:csData.userName otherName:csData.otherName content:csData.commentContext];
+    }
 }
 - (void)setSecondViewThirdInfo:(DynamicCommentSecondData *)csData {
-    [self.secondView setContentForThirdLabel:csData.userName otherName:csData.otherName content:csData.commentContext];
+    if (csData.secondIsRole.integerValue == 1) {
+        [self.secondView setContentForThirdLabelForRole:csData.userName otherName:csData.otherName content:csData.commentContext];
+    } else {
+        [self.secondView setContentForThirdLabel:csData.userName otherName:csData.otherName content:csData.commentContext];
+    }
 }
 
 - (void)upDateCellLayout:(CGFloat)commitH secondHeight:(CGFloat)secondH {
@@ -149,21 +225,32 @@
         NSInteger count = dynamicObj.secondView.count;
         if (count > 0) {
             CGFloat commitListH = 0;//
-            if (count > 3) {
+            if (dynamicObj.commentNum.integerValue > Default_Show_Count) {
                 commitListH = 15*4 + 28;
             } else {
                 commitListH = 15 * (count+1);
             }
             for (int i = 0; i < count; i++) {
                 DynamicCommentSecondData *seObj = [dynamicObj.secondView objectAtIndex:i];
-                NSString *content = [NSString stringWithFormat:@"%@@%@:%@",seObj.userName,seObj.otherName,seObj.commentContext];
-                CGFloat h = [ATools getHeightByWidth:Info_Width-SecondView_LeftRight_SPace*2 title:content font:Commit_Font];
-                commitListH = commitListH + h;
-                if (i == 2) {
+                
+                if (seObj.secondIsRole.integerValue == 1) {
+//                    [content stringByAppendingString:@"        "];
+                    NSString *content = [NSString stringWithFormat:@"%@ @ %@：%@",seObj.userName,seObj.otherName,seObj.commentContext];
+//                    CGFloat h = [ATools getHeightByWidth:Info_Width-SecondView_LeftRight_SPace*2-16 title:content font:Commit_Font]+.5;
+                    CGFloat h = [ATools getHeightByWidth:Info_Width-16 title:content font:Commit_Font]+.5;
+                    commitListH = commitListH + h;
+                } else {
+                    NSString *content = [NSString stringWithFormat:@"%@ @%@：%@",seObj.userName,seObj.otherName,seObj.commentContext];
+//                    CGFloat h = [ATools getHeightByWidth:Info_Width-SecondView_LeftRight_SPace*2 title:content font:Commit_Font];
+                    CGFloat h = [ATools getHeightByWidth:Info_Width title:content font:Commit_Font];
+                    commitListH = commitListH + h;
+                }
+                
+                if (i == (Default_Show_Count-1)) {
                     break;
                 }
             }
-            commitSecond = commitListH+5;
+            commitSecond = commitListH+5-5;
         }
         return commitSecond;
     }
@@ -178,6 +265,7 @@
     [self addSubview:self.secondView];
     [self addSubview:self.timeLabel];
     [self addSubview:self.praiseLabel];
+    [self addSubview:self.lineLabel];
     [self setupMakeBodyViewSubViewsLayout];
 }
 
@@ -208,16 +296,23 @@
     }];
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(_nameLabel.mas_left).offset(0);
-        make.bottom.mas_equalTo(self.mas_bottom).offset(-5);
+        make.bottom.mas_equalTo(self.mas_bottom).offset(-10);
         make.width.mas_offset(DMScreenWidth/3);
         make.height.mas_offset(Bottom_Area_H/2);
     }];
     [self.praiseLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.mas_equalTo(self.mas_right).offset(-10);
-        make.bottom.mas_equalTo(self.mas_bottom).offset(0);
+        make.right.mas_equalTo(self.mas_right).offset(-16);
+        make.bottom.mas_equalTo(self.mas_bottom).offset(-5);
         make.width.mas_offset(Bottom_Area_H);
         make.height.mas_offset(32);
     }];
+    [_lineLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.mas_equalTo(self).mas_offset(0);
+        make.left.mas_equalTo(self).mas_offset(0);
+        make.bottom.mas_equalTo(self.mas_bottom).mas_offset(-0.5);
+        make.height.mas_offset(0.5);
+    }];
+
 }
 
 - (CommintSecondView *)secondView {
@@ -282,7 +377,13 @@
     }
     return _headImageView;
 }
-
+- (UILabel *)lineLabel {
+    if (_lineLabel == nil) {
+        _lineLabel = [[UILabel alloc] init];
+        _lineLabel.backgroundColor = UIColorFromRGB(0xC3C3C3);
+    }
+    return _lineLabel;
+}
 
 - (void)awakeFromNib {
     [super awakeFromNib];

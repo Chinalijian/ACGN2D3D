@@ -93,8 +93,9 @@
     self.introduceLabel.attributedText = [ATools attributedStringFromStingWithFont:Commit_Font withLineSpacing:5 text:self.dynamicObj.introduce isEllipsis:NO];
     //self.introduceLabel.text = self.dynamicObj.introduce;
     //[ATools changeLineSpaceForLabel:self.introduceLabel WithSpace:5];
-    NSString * imageUrl = [self.dynamicObj.imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    [self.peopleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil];
+//    NSString * imageUrl = [self.dynamicObj.imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+//    [self.peopleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil];
+    [ATools loadImageUrlForImageView:self.peopleImageView imageUrl:self.dynamicObj.imageUrl];
     if (self.dynamicObj.hasFollow.intValue >= 1) {
         [self.attButton setTitle:@"已关注" forState:UIControlStateNormal];
     } else {

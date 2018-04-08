@@ -24,6 +24,8 @@ static const float VIEW_LOGICAL_MAX_RIGHT = 2;
 static const float VIEW_LOGICAL_MAX_BOTTOM = -2;
 static const float VIEW_LOGICAL_MAX_TOP = 2;
 
+static const float VIEW_LOGICAL_MAX_BOTTOM_X = -4;
+static const float VIEW_LOGICAL_MAX_TOP_X = 4;
 
 // モデル定義------------------------------------------------------------------------
 // view的背景图片

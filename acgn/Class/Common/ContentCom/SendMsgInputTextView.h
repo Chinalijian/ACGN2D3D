@@ -23,4 +23,5 @@
 @property (nonatomic,strong)UIFont *font;       //文字大小
 - (void)rectFrame:(CGRect)rect;
 - (void)cleanTextInfo;
+- (void)setAlpLabel:(NSString *)name;
 @end

@@ -28,6 +28,13 @@
 + (CGFloat)getHeightByWidth:(CGFloat)width title:(NSString *)title font:(UIFont*)font withLineSpacing:(CGFloat)lineSpacing;
 + (CGFloat)getHeightByHeight:(CGFloat)height title:(NSString *)title font:(UIFont*)font;
 + (NSMutableAttributedString *)colerString:(NSString *)sourceStr allStr:(NSString *)allStr color:(UIColor *)color font:(UIFont *)font;
+//带有图片的文本
++ (NSMutableAttributedString *)colerString:(NSString *)firstStr secondStr:(NSString *)secondStr allStr:(NSString *)allStr firstColor:(UIColor *)firstColor secondColor:(UIColor *)secondColor font:(UIFont *)font imageName:(NSString *)imageName imageBounds:(CGRect)rectImage;
+//带有图片的文本
++ (NSMutableAttributedString *)colerString:(NSString *)sourceStr allStr:(NSString *)allStr color:(UIColor *)color font:(UIFont *)font imageName:(NSString *)imageName imageBounds:(CGRect)rectImage isFirstIndex:(BOOL)firstIndex;
+
++ (CGSize)calculateImageRect:(CGFloat)w height:(CGFloat)h image:(UIImage *)image imageView:(UIImageView *)imageView;
+
 /**
  *  改变行间距
  */
@@ -66,6 +73,10 @@
 //是否已经有此文件
 + (BOOL)fileExistsAtPathForLocal:(NSString *)filePath;
 
+//加载图片
++ (void)loadImageUrlForImageView:(UIImageView *)imageV imageUrl:(NSString *)url;
+//加载图片
++ (void)loadImageUrlForImageView:(UIImageView *)imageV imageUrl:(NSString *)url block:(void(^)(BOOL result))block;
 @end
 
 

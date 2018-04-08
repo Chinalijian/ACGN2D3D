@@ -17,6 +17,7 @@
 #import "UnityController.h"
 #import "ModeShowView.h"
 #import "ACLive2DManager.h"
+#import "AppDelegate.h"
 @interface ModelShowViewController () <ModeShowViewDelegate>
 @property (nonatomic, strong) ModeShowView *msView;
 @property (nonatomic, assign) Model_Show_Type type;
@@ -34,7 +35,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"立体形象";
+
     if (!OBJ_IS_NIL(self.detailData)) {
         [ModelFileManager shareInstance].modelFilePathName = self.detailData.fileName;
         [ModelFileManager shareInstance].modefFileRoleID = self.detailData.roleId;
@@ -49,7 +50,19 @@
             [self downLoadModelFiles];
 
         } else {
-            [self.msView.defaultShowImageView sd_setImageWithURL:[NSURL URLWithString:self.detailData.showUrl] placeholderImage:[UIImage imageNamed:@"default_model_Image"]];
+            WS(weakSelf);
+//            [self.msView.defaultShowImageView sd_setImageWithURL:[NSURL URLWithString:self.detailData.showUrl] placeholderImage:[UIImage imageNamed:@"default_model_Image"]];
+            [DMActivityView showActivity:self.view];
+            NSString * imageUrl = [self.detailData.showUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+            [self.msView.defaultShowImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                [DMActivityView hideActivity];
+                if (image) {
+                    weakSelf.msView.defaultShowImageView.image = image;
+                } else {
+                    weakSelf.msView.defaultShowImageView.image = [UIImage imageNamed:@"default_model_Image"];
+                }
+            }];
+            
             [self.msView.bottomProgressView setProgress:1 animated:YES];
         }
     }
@@ -93,32 +106,13 @@
     NSString *tPath = [ATools getCachesHaveFile:[NSString stringWithFormat:@"%@/%@/%@", self.detailData.roleId, self.detailData.fileName, self.detailData.showJson]];
     BOOL isHave = [ATools fileExistsAtPathForLocal:tPath];
     if (isHave) {
-//
-//        // 处理耗时操作的代码块...
-//        // 获取Documents目录
-//        NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-//        // 字典写入文件
-//        // 创建一个存储字典的文件路径
-//        NSString *fileDicPath = [docPath stringByAppendingPathComponent:[ModelFileManager shareInstance].modefFileAllPath];
-//
-//        NSData *data = [[NSData alloc] initWithContentsOfFile:fileDicPath];
-//
-//        NSDictionary *resultDic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-//        NSMutableDictionary *mutResultDic = [NSMutableDictionary dictionaryWithDictionary:resultDic];
-//        NSMutableDictionary *dicLayout = [resultDic objectForKey:@"layout"];
-//        if (!OBJ_IS_NIL(dicLayout)) {
-//            [dicLayout setObject:@"1.1" forKey:@"y"];
-//            //[resultDic writeToFile:fileDicPath atomically:YES];
-//        }
-//
-//
-//
+        [self modifyJsonContent:tPath];
         [self load2DModelOr3DMoel];
         self.msView.bottomProgressView.progress = 1.0;
         return;
     }
-    [self showWaitingPop];
-    
+    //[self showWaitingPop];
+    [DMActivityView showActivity:self.view];
     __weak __typeof(&*self.msView.bottomProgressView) weakProgressView = self.msView.bottomProgressView;
     [AApiModel downloadFileFromServer:self.detailData.showUrl fileName:self.detailData.fileName block:^(BOOL result, NSString *filePathUrl) {
         if (result) {
@@ -126,10 +120,11 @@
             if (!STR_IS_NIL(unzipPath)) {
 
                 dispatch_async(dispatch_get_global_queue(0, 0), ^{
-
+                    [weakSelf modifyJsonContent:tPath];
                     //通知主线程刷新
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [SVProgressHUD dismiss];
+                        //[SVProgressHUD dismiss];
+                        [DMActivityView hideActivity];
                         [weakSelf load2DModelOr3DMoel];
                     });
                     
@@ -137,11 +132,13 @@
                 
           
             } else {
-                [SVProgressHUD dismiss];
+                //[SVProgressHUD dismiss];
+                [DMActivityView hideActivity];
                 [weakSelf performSelector:@selector(faileErrorShowModel) withObject:nil afterDelay:1];
             }
         } else {
-            [SVProgressHUD dismiss];
+            //[SVProgressHUD dismiss];
+            [DMActivityView hideActivity];
             [weakSelf performSelector:@selector(faileErrorShowModel) withObject:nil afterDelay:1];
         }
     } progress:^(double fractionCompleted) {
@@ -151,6 +148,25 @@
         });
         
     }];
+}
+
+- (void)modifyJsonContent:(NSString *)filePath {
+    if (IS_IPHONE_X) {
+        NSData *jsonData = [NSData dataWithContentsOfFile:filePath];
+        NSMutableDictionary *resultDic = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingMutableContainers error:nil];
+        NSMutableDictionary *modifyDic = [resultDic objectForKey:@"layout"];
+        NSNumber *yValue = [modifyDic objectForKey:@"y"];
+        if ([yValue doubleValue] != 1.05) {
+            [modifyDic setValue:[NSNumber numberWithDouble:1.05] forKey:@"y"];
+            NSError *error;
+            NSData *resultData = [NSJSONSerialization dataWithJSONObject:resultDic options:kNilOptions error:&error];
+            NSString *resultJsonString =[[NSString alloc] initWithData:resultData encoding:NSUTF8StringEncoding];
+            //[resultJsonString writeToFile:filePath atomically:YES];
+            resultJsonString = [resultJsonString stringByReplacingOccurrencesOfString:@"\\/" withString:@"/"];
+            
+            [resultJsonString writeToFile:filePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        }
+    }
 }
 
 - (void)load2DModelOr3DMoel {
@@ -168,33 +184,11 @@
 }
 
 - (void)loadLive2D {
-    // Live2Dを初期化
-//    if (live2DMgr == nil) {
-//        live2DMgr = new LAppLive2DManager();
-//        CGRect screen = [IPhoneUtil getScreenRect];
-//        LAppView* viewA = live2DMgr->createView(screen);
-//        
-//        live2DMgr->changeModel();
-//        
-//        UIView *liView = (UIView *)viewA;
-//        // 画面に表示
-//        [self.msView addSubview:liView];
-//        
-//        [self.msView sendSubviewToBack:liView];
-//        
-//        if (LAppDefine::DEBUG_LOG) NSLog(@"viewWillAppear @ViewController");
-//        live2DMgr->onResume();
-//    } else {
-//        live2DMgr->update();
-//    }
-    
     [[ACLive2DManager shareInstance] loadLive2d:self.msView];
 }
 
 - (void)load3DModel {
-    Mode3DViewController *mode3d = [[Mode3DViewController alloc] init];
-    [self presentViewController:mode3d animated:NO completion:^{
-    }];
+
 }
 
 - (void)clickModeShowButton:(id)sender {

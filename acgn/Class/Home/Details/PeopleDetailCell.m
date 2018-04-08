@@ -15,12 +15,18 @@
 #define TypeButton_W 30.5
 #define Space_Right_Cell 24
 #define Space_Left_View 13
-#define Space_Content_ 10
-#define Video_Height 101
-#define Content_With (DMScreenWidth-Space_Right_Cell-Space_Left_View-TypeButton_W-Space_Left_View-Time_Width)
-#define Pic_Height (Content_With)*(0.64)+5
+#define Space_Content_ 15
+
+#define Content_With 238//(DMScreenWidth-Space_Right_Cell-Space_Left_View-TypeButton_W-Space_Left_View-Time_Width)
+
+#define Pic_Height 124//(Content_With)*(0.64)+5
+#define Pic_Video_Width 195
+
 #define Small_Image_W_H 63
 #define Small_Image_Space 4
+
+#define Video_Height 102
+
 @interface PeopleDetailCell () <ImageComDelegate>
 
 @property (nonatomic, strong) UILabel *bigTimeLabel;
@@ -52,9 +58,10 @@
         
     } else if (obj.postType.integerValue == Info_Type_Video || obj.postType.integerValue == Info_Type_Url_Video) {
         //视频
-        picHeight = Video_Height + 50+30;
+        picHeight = Video_Height + 0 + 30;
     }
-    CGFloat totalHeight = contentHeight + picHeight + Button_View_ + Space_Bottom_Cell + Space_Content_;
+//    CGFloat totalHeight = contentHeight + picHeight + Button_View_ + Space_Bottom_Cell + Space_Content_;
+    CGFloat totalHeight = contentHeight + picHeight + Button_View_ + Space_Content_*2;
     return totalHeight;
 }
 + (CGFloat)getContentMaxHeight:(RoleDetailsPostData *)obj {
@@ -66,6 +73,9 @@
 + (CGFloat)getImageMaxHeight:(RoleDetailsPostData *)obj {
     if (obj.postUrls.count > 0) {
         if (obj.postUrls.count == 1) {
+            if (obj.postType.integerValue == Info_Type_Video || obj.postType.integerValue == Info_Type_Url_Video) {
+                return Video_Height;
+            }
             return Pic_Height;
         } else {
             NSInteger rowCount = obj.postUrls.count/3;
@@ -126,10 +136,19 @@
             self.imageCom.hidden = NO;
             CGFloat imageH = [PeopleDetailCell getImageMaxHeight:obj];
             [_imageCom mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(self.contentLabel.mas_bottom).mas_offset(Space_Content_);
                 make.height.mas_offset(imageH);
             }];
-            
+//            [self.buttonView mas_updateConstraints:^(MASConstraintMaker *make) {
+//                make.top.mas_equalTo(self.imageCom.mas_bottom).mas_offset(Space_Content_);
+//            }];
             [self.imageCom configImageCom:obj.postUrls height:imageH type:obj.postType.integerValue thumbnailUrl:obj.thumbnailUrl];
+            
+        } else {
+            [_imageCom mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.top.mas_equalTo(self.contentLabel.mas_bottom).mas_offset(0);
+                make.height.mas_offset(0);
+            }];
         }
         [self.seeNumButton setTitle:obj.seeNum forState:UIControlStateNormal];
         [self.commitNumButton setTitle:obj.commentNum forState:UIControlStateNormal];
@@ -141,9 +160,7 @@
         }
         [self layoutSubviews];
     }
-    
 }
-
 
 - (void)clickPraise:(id)sender {
     if ([self.delegate respondsToSelector:@selector(userClickFabulousPraise:)]) {
@@ -190,7 +207,6 @@
     [self.buttonView addSubview:self.seeNumButton];
     [self.buttonView addSubview:self.commitNumButton];
     [self.buttonView addSubview:self.praiseNumButton];
-    
     [self setupMakeBodyViewSubViewsLayout];
 }
 
@@ -225,21 +241,35 @@
         make.height.mas_offset(0);
         make.width.mas_offset(Content_With);
     }];
-    [self.buttonView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.mas_equalTo(self.mas_bottom).mas_offset(-Space_Bottom_Cell);
-        make.left.mas_equalTo(self.contentLabel.mas_left).mas_offset(0);
-        make.height.mas_offset(Button_View_);
-        make.width.mas_offset(Content_With);
-    }];
+//    [self.buttonView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.mas_equalTo(self.mas_bottom).mas_offset(-Space_Bottom_Cell);
+//        make.left.mas_equalTo(self.contentLabel.mas_left).mas_offset(0);
+//        make.height.mas_offset(Button_View_);
+//        make.width.mas_offset(Content_With);
+//    }];
+//
+//    [self.imageCom mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.mas_equalTo(self.contentLabel.mas_bottom).mas_offset(Space_Content_);
+//        make.left.mas_equalTo(self.contentLabel.mas_left).mas_offset(0);
+//        //make.height.mas_offset(0);
+//        make.bottom.mas_equalTo(self.buttonView.mas_top).mas_equalTo(10);
+//        make.width.mas_offset(Content_With);
+//    }];
     
     [self.imageCom mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.mas_equalTo(self.contentLabel.mas_bottom).mas_offset(Space_Content_);
         make.left.mas_equalTo(self.contentLabel.mas_left).mas_offset(0);
-        //make.height.mas_offset(0);
-        make.bottom.mas_equalTo(self.buttonView.mas_top).mas_equalTo(10);
-        make.width.mas_offset(Content_With);
+        make.height.mas_offset(0);
+        //make.width.mas_offset(Content_With);
+        make.width.mas_offset(Pic_Video_Width);
     }];
-    
+    [self.buttonView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.mas_equalTo(self.imageCom.mas_bottom).mas_offset(Space_Content_);
+        make.left.mas_equalTo(self.contentLabel.mas_left).mas_offset(0);
+        make.height.mas_offset(Button_View_);
+        make.width.mas_offset(Content_With-14);
+    }];
+
     [self.seeNumButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(self.buttonView).mas_offset(0);
         make.left.mas_equalTo(self.buttonView).mas_offset(0);
@@ -263,7 +293,7 @@
 
 - (ImageCom *)imageCom {
     if (_imageCom == nil) {
-        _imageCom = [[ImageCom alloc] initWithBigImage:Content_With-10 bigImageHeight:Pic_Height-10 smallImageWidth:Small_Image_W_H samllImageHeight:Small_Image_W_H smallSpace:Small_Image_Space frameW:Content_With frameH:0];
+        _imageCom = [[ImageCom alloc] initWithBigImage:Pic_Video_Width bigImageHeight:0 smallImageWidth:Small_Image_W_H samllImageHeight:Small_Image_W_H smallSpace:Small_Image_Space frameW:Content_With frameH:0 isNoCalculate:YES];
         _imageCom.delegate = self;
         _imageCom.backgroundColor = [UIColor clearColor];
     }

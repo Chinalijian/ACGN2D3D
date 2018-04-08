@@ -88,14 +88,27 @@ using namespace live2d::framework;
         viewMatrix->setMaxScale( VIEW_MAX_SCALE );// 限界拡大率
         viewMatrix->setMinScale( VIEW_MIN_SCALE );// 限界縮小率
         
-        // 表示できる最大範囲
-        viewMatrix->setMaxScreenRect(
-			VIEW_LOGICAL_MAX_LEFT,
-             VIEW_LOGICAL_MAX_RIGHT,
-             VIEW_LOGICAL_MAX_BOTTOM,
-             VIEW_LOGICAL_MAX_TOP
-		    );
-		
+        if (IS_IPHONE_X) {
+            // 表示できる最大範囲
+            viewMatrix->setMaxScreenRect(
+                                         VIEW_LOGICAL_MAX_LEFT,
+                                         VIEW_LOGICAL_MAX_RIGHT,
+                                         VIEW_LOGICAL_MAX_BOTTOM_X,
+                                         VIEW_LOGICAL_MAX_TOP_X
+                                         );
+            
+        } else {
+            // 表示できる最大範囲
+            viewMatrix->setMaxScreenRect(
+                                         VIEW_LOGICAL_MAX_LEFT,
+                                         VIEW_LOGICAL_MAX_RIGHT,
+                                         VIEW_LOGICAL_MAX_BOTTOM,
+                                         VIEW_LOGICAL_MAX_TOP
+                                         );
+            
+        }
+        
+
     }
     return self;
 }
@@ -330,6 +343,11 @@ using namespace live2d::framework;
 
 -(void) updateViewMatrix:(float) dx :(float) dy :(float) cx :(float) cy :(float) scale
 {
+    
+    //Ares add - 不要放大缩小需求
+    return;
+    
+    //
 	bool isMaxScale=viewMatrix->isMaxScale();
 	bool isMinScale=viewMatrix->isMinScale();
 	

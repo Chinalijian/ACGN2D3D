@@ -9,6 +9,9 @@
 #import "ImageCom.h"
 #import "JLPhotoBrowser.h"
 @interface ImageCom()
+
+@property (nonatomic, assign) BOOL isNoCalculate;
+
 @property (nonatomic, strong) UIImageView *bigImageView;
 @property (nonatomic, strong) UIImageView *bigSourceImageView;
 @property (nonatomic, strong) UILabel *typeLabel;
@@ -39,6 +42,19 @@
 @end
 
 @implementation ImageCom
+
+- (id)initWithBigImage:(CGFloat)width
+        bigImageHeight:(CGFloat)height
+       smallImageWidth:(CGFloat)swidth
+      samllImageHeight:(CGFloat)sheight
+            smallSpace:(CGFloat)sspace
+                frameW:(CGFloat)frameW
+                frameH:(CGFloat)frameH isNoCalculate:(BOOL)isNoCalculate {
+    self.isNoCalculate = isNoCalculate;
+    return [self initWithBigImage:width bigImageHeight:height smallImageWidth:swidth samllImageHeight:sheight smallSpace:sspace frameW:frameW frameH:frameH];
+}
+
+
 - (id)initWithBigImage:(CGFloat)width
         bigImageHeight:(CGFloat)height
        smallImageWidth:(CGFloat)swidth
@@ -61,19 +77,37 @@
 }
 
 - (void)onlySinglePic:(NSString *)imageUrl height:(CGFloat)height {
-    
+
+    NSString *imageUrlS = [imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     self.bigImageView.frame = CGRectMake(0, 0, self.bigImageView.frame.size.width, height);
-    //self.bigImageView.backgroundColor = [UIColor redColor];
     self.smallImageView.hidden = YES;
     self.bigImageView.hidden = NO;
     self.typeLabel.hidden = YES;
     self.videoIconView.hidden = YES;
-    NSString * imageUrlS = [imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    [self displaySourceImage:imageUrlS];
     self.bigImageView.userInteractionEnabled = YES;
+    self.bigSourceImageView.userInteractionEnabled = YES;
+    if (self.isNoCalculate) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageTap:)];
+        [_bigSourceImageView addGestureRecognizer:tap];
+        self.bigSourceImageView.frame = self.bigImageView.bounds;
+        [ATools loadImageUrlForImageView:self.bigSourceImageView imageUrl:imageUrl];
+        [self.imageViews addObject:_bigSourceImageView];
+        
+        if (self.typeInfo == Info_Type_Video || self.typeInfo == Info_Type_Url_Video) {
+//            self.bigSourceImageView.frame = CGRectMake(0, 0, self.bWidth, self.bHeight-8);
+            self.typeLabel.frame = CGRectMake(self.bigSourceImageView.frame.size.width-35-4, self.bigSourceImageView.frame.size.height-16-4, 35, 16);
+            self.videoIconView.frame = CGRectMake((self.bigSourceImageView.frame.size.width-38)/2, (self.bigSourceImageView.frame.size.height-38)/2, 38, 38);
+        } else {
+            self.typeLabel.frame = CGRectMake(self.bigSourceImageView.frame.size.width-24-4, self.bigSourceImageView.frame.size.height-16-4, 24, 16);
+        }
+        
+    } else {
+        [self displaySourceImage:imageUrlS];
+    }
+
     //2.添加手势
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageTap:)];
-    [_bigImageView addGestureRecognizer:tap];
+//    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageTap:)];
+//    [_bigImageView addGestureRecognizer:tap];
     if (_typeInfo == Info_Type_GIf_Pic) {
         if ([[imageUrlS lastPathComponent] containsString:@".gif"]) {
             self.typeLabel.text = @"GIF";
@@ -173,8 +207,7 @@
                         }
                         //image的高度大于当前视图的高度
                         if(imageVRect.size.height > weakSelf.bHeight)
-                        {
-                            
+                        {                            
                             //根据高度计算宽度，确定宽度
                             imageVRect.size.width = weakSelf.bHeight * imageVRect.size.width / imageVRect.size.height;
                             imageVRect.size.height = weakSelf.bHeight;
@@ -183,7 +216,7 @@
                         //计算x，y
                         imageVRect.origin.x = 0;//(weakSelf.bWidth-imageVRect.size.width)/2;
                         imageVRect.origin.y = 0;//(weakSelf.bHeight-imageVRect.size.height)/2;
-                        strongImageView.frame = imageVRect;
+                        
                         if (weakSelf.typeInfo == Info_Type_Video || weakSelf.typeInfo == Info_Type_Url_Video) {
                             strongImageView.frame = CGRectMake(0, 0, weakSelf.bWidth, weakSelf.bHeight-8);
                             weakLabel.frame = CGRectMake(strongImageView.frame.size.width-35-4, strongImageView.frame.size.height-16-4, 35, 16);
@@ -191,8 +224,12 @@
 //                            weakLabel.frame = CGRectMake(imageVRect.size.width-35-4, imageVRect.size.height-16-4, 35, 16);
 //                            weakVideoIconView.frame = CGRectMake((imageVRect.size.width-38)/2, (imageVRect.size.height-38)/2, 38, 38);
                         } else {
+                            weakSelf.bigImageView.frame = CGRectMake(0, 0, imageVRect.size.width, imageVRect.size.height);
+                            strongImageView.frame = imageVRect;
                             weakLabel.frame = CGRectMake(imageVRect.size.width-24-4, imageVRect.size.height-16-4, 24, 16);
                         }
+                        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(imageTap:)];
+                        [strongImageView addGestureRecognizer:tap];
                         strongImageView.image = image;
                         [weakSelf.imageViews addObject:strongImageView];
                         [strongImageView setNeedsLayout];
@@ -211,13 +248,13 @@
     [self addSubview:self.smallImageView];
     
     self.bigImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bWidth, self.bHeight)];
-    self.bigImageView.tag = 1000;
+    self.bigImageView.tag = 9999;
     self.bigImageView.clipsToBounds = YES;
     self.bigImageView.contentMode = UIViewContentModeScaleAspectFill;
     [self addSubview:self.bigImageView];
     
     self.bigSourceImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-    self.bigSourceImageView.tag = 9999;
+    self.bigSourceImageView.tag = 1000;
     self.bigSourceImageView.clipsToBounds = YES;
     self.bigSourceImageView.contentMode = UIViewContentModeScaleAspectFill;
     [self.bigImageView addSubview:self.bigSourceImageView];

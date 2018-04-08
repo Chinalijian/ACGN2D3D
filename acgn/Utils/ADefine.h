@@ -95,7 +95,7 @@ blue:(((rgbValue) & 0xFF))/255.f alpha:1.0]
 #define StatusBarHeight (20.0f)
 
 #define Default_Placeholder_Image [UIImage imageNamed:@"image_error_icon"]
-
+#define Default_PlaceholderLoading_Image [UIImage imageNamed:@"Image_loading_icon"]
 /** 设备屏幕宽 */
 #define kMainScreenWidth  [UIScreen mainScreen].bounds.size.width
 /** 设备屏幕高度 */

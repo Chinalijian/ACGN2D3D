@@ -50,7 +50,7 @@
 #define Image_Height (Content_Label_Widht)*(0.64)+5
 #define Image_Width (Content_Label_Widht)-10
 #define Image_Space 8
-
+#define Video_Height (Content_Label_Widht)*(0.64)-15
 #define Small_Image_W_H 63
 #define Small_Image_Space 4
 
@@ -59,7 +59,7 @@
 #define BottomView_H 34
 
 + (CGFloat)getContentCommonCellHeight:(DynamicListData *)obj contentType:(ContentCom_Type)type {
-    NSLog(@"dd = %f",(Content_Label_Widht)*(0.64)+10);
+    //NSLog(@"dd = %f",(Content_Label_Widht)*(0.64)+10);
     CGFloat totalHeight = 0;
     CGFloat tempNavHeight = Temp_Nav_H;
     CGFloat imageH = 0;
@@ -69,7 +69,11 @@
             if (STR_IS_NIL(obj.thumbnailUrl) && obj.postUrls.count == 0) {
                 imageH = 0;
             } else {
-                imageH = Image_Height;
+                if (obj.postType.integerValue == Info_Type_Video || obj.postType.integerValue == Info_Type_Url_Video) {
+                    imageH = Video_Height;
+                } else {
+                    imageH = Image_Height;
+                }
             }
             
         }
@@ -194,8 +198,31 @@
     self.contentLabel.attributedText = [ATools attributedStringFromStingWithFont:Commit_Font withLineSpacing:5 text:obj.postContext isEllipsis:isEllipsis];
 //    self.contentLabel.text = obj.postContext;
 //    [ATools changeLineSpaceForLabel:self.contentLabel WithSpace:5];
-    NSString * imageUrl = [obj.imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    [self.peopleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil];
+//    NSString * imageUrl = [obj.imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+//    [self.peopleImageView sd_setImageWithURL:[NSURL URLWithString:imageUrl] placeholderImage:nil];
+    
+    [ATools loadImageUrlForImageView:self.peopleImageView imageUrl:obj.imageUrl];
+    
+//    WS(weakSelf);
+//    [ATools loadImageUrlForImageView:self.peopleImageView imageUrl:obj.imageUrl block:^(BOOL result) {
+//        if (result) {
+//            CGSize sizeImage = [ATools calculateImageRect:PeopleImage_Width height:PeopleImage_Height image:self.peopleImageView.image imageView:self.peopleImageView];
+//            if (sizeImage.width != PeopleImage_Width || sizeImage.height != PeopleImage_Height) {
+//                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+//                    //do something.....
+//                    CGFloat rightValue = PeopleImage_Width > sizeImage.width ? (PeopleImage_Width-sizeImage.width)/2 : 0;
+//                    dispatch_async(dispatch_get_main_queue(), ^{
+//                        [weakSelf.peopleImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+//                            make.right.mas_equalTo(self.contentView).mas_offset(-20-rightValue);
+//                            make.height.mas_offset(sizeImage.height);
+//                            make.width.mas_offset(sizeImage.width);
+//                        }];
+//                    });
+//                });
+//            }
+//        }
+//    }];
+
     [self.attButton setTitle:obj.seeNum forState:UIControlStateNormal];
     [self.comButton setTitle:obj.commentNum forState:UIControlStateNormal];
     [self.praButton setTitle:obj.fabulousNum forState:UIControlStateNormal];
@@ -251,7 +278,11 @@
             if (STR_IS_NIL(obj.thumbnailUrl) && obj.postUrls.count == 0) {
                 imageH = 0;
             } else {
-                imageH = Image_Height;
+                if (obj.postType.integerValue == Info_Type_Video || obj.postType.integerValue == Info_Type_Url_Video) {
+                    imageH = Video_Height;
+                } else {
+                    imageH = Image_Height;
+                }
             }
             
         }

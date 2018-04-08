@@ -7,7 +7,7 @@
 //
 
 #import "ABaseDataModel.h"
-
+#import "DynamicData.h"
 
 //@interface MsgListData : ABaseDataModel
 //@property (nonatomic, copy) NSString *commentTime;
@@ -28,4 +28,15 @@
 @property (nonatomic, copy) NSString *code;
 @property (nonatomic, copy) NSString *msg;
 @property (nonatomic, strong) NSArray *data;
+@end
+
+@interface MsgCommitData : NSObject
+@property (nonatomic, strong) DynamicCommentListData *firstComment;
+@property (nonatomic, strong) NSArray *secondComment;
+@end
+
+@interface MsgDetailData : ABaseDataModel
+@property (nonatomic, copy) NSString *code;
+@property (nonatomic, copy) NSString *msg;
+@property (nonatomic, strong) MsgCommitData *data;
 @end

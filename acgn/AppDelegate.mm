@@ -12,7 +12,7 @@
 #import "ShareManage.h"
 #import "UnityController.h"
 @interface AppDelegate ()
-@property (nonatomic, strong) UnityController *unityController;
+//@property (nonatomic, strong) UnityController *unityController;
 @end
 
 @implementation AppDelegate
@@ -22,9 +22,9 @@
 }
 
 - (void)initUnityVC {
-    if (_unityController == nil) {
-        _unityController = [[UnityController alloc] init];
-    }
+//    if (_unityController == nil) {
+//        _unityController = [[UnityController alloc] init];
+//    }
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
